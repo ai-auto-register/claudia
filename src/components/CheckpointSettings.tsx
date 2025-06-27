@@ -24,7 +24,7 @@ interface CheckpointSettingsProps {
 }
 
 /**
- * CheckpointSettings component for managing checkpoint configuration
+ * CheckpointSettings 组件，用于管理检查点配置
  * 
  * @example
  * <CheckpointSettings 
@@ -50,10 +50,10 @@ export const CheckpointSettings: React.FC<CheckpointSettingsProps> = ({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const strategyOptions: SelectOption[] = [
-    { value: "manual", label: "Manual Only" },
-    { value: "per_prompt", label: "After Each Prompt" },
-    { value: "per_tool_use", label: "After Tool Use" },
-    { value: "smart", label: "Smart (Recommended)" },
+    { value: "manual", label: "仅手动" },
+    { value: "per_prompt", label: "每次提示后" },
+    { value: "per_tool_use", label: "每次工具使用后" },
+    { value: "smart", label: "智能 (推荐)" },
   ];
 
   useEffect(() => {
@@ -137,11 +137,11 @@ export const CheckpointSettings: React.FC<CheckpointSettingsProps> = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Settings className="h-5 w-5" />
-          <h3 className="text-lg font-semibold">Checkpoint Settings</h3>
+          <h3 className="text-lg font-semibold">检查点设置</h3>
         </div>
         {onClose && (
           <Button variant="ghost" size="sm" onClick={onClose}>
-            Close
+            关闭
           </Button>
         )}
       </div>
@@ -151,9 +151,9 @@ export const CheckpointSettings: React.FC<CheckpointSettingsProps> = ({
         <div className="flex items-start gap-2">
           <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5" />
           <div className="text-xs">
-            <p className="font-medium text-yellow-600">Experimental Feature</p>
+            <p className="font-medium text-yellow-600">实验性功能</p>
             <p className="text-yellow-600/80">
-              Checkpointing may affect directory structure or cause data loss. Use with caution.
+              检查点可能影响目录结构或导致数据丢失。请谨慎使用。
             </p>
           </div>
         </div>
@@ -186,9 +186,9 @@ export const CheckpointSettings: React.FC<CheckpointSettingsProps> = ({
         {/* Auto-checkpoint toggle */}
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label htmlFor="auto-checkpoint">Automatic Checkpoints</Label>
+            <Label htmlFor="auto-checkpoint">自动检查点</Label>
             <p className="text-sm text-muted-foreground">
-              Automatically create checkpoints based on the selected strategy
+              根据所选策略自动创建检查点
             </p>
           </div>
           <Switch
@@ -209,10 +209,10 @@ export const CheckpointSettings: React.FC<CheckpointSettingsProps> = ({
             disabled={isLoading || !autoCheckpointEnabled}
           />
           <p className="text-xs text-muted-foreground">
-            {checkpointStrategy === "manual" && "Checkpoints will only be created manually"}
-            {checkpointStrategy === "per_prompt" && "A checkpoint will be created after each user prompt"}
-            {checkpointStrategy === "per_tool_use" && "A checkpoint will be created after each tool use"}
-            {checkpointStrategy === "smart" && "Checkpoints will be created after destructive operations"}
+            {checkpointStrategy === "manual" && "检查点将仅手动创建"}
+            {checkpointStrategy === "per_prompt" && "每次用户提示后将创建一个检查点"}
+            {checkpointStrategy === "per_tool_use" && "每次工具使用后将创建一个检查点"}
+            {checkpointStrategy === "smart" && "破坏性操作后将创建检查点"}
           </p>
         </div>
 
@@ -225,12 +225,12 @@ export const CheckpointSettings: React.FC<CheckpointSettingsProps> = ({
           {isSaving ? (
             <>
               <Save className="h-4 w-4 mr-2 animate-spin" />
-              Saving...
+              正在保存...
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Save Settings
+              保存设置
             </>
           )}
         </Button>
@@ -239,9 +239,9 @@ export const CheckpointSettings: React.FC<CheckpointSettingsProps> = ({
       <div className="border-t pt-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label>Storage Management</Label>
+            <Label>存储管理</Label>
             <p className="text-sm text-muted-foreground">
-              Total checkpoints: {totalCheckpoints}
+              总检查点数: {totalCheckpoints}
             </p>
           </div>
           <HardDrive className="h-5 w-5 text-muted-foreground" />
@@ -249,7 +249,7 @@ export const CheckpointSettings: React.FC<CheckpointSettingsProps> = ({
 
         {/* Cleanup settings */}
         <div className="space-y-2">
-          <Label htmlFor="keep-count">Keep Recent Checkpoints</Label>
+          <Label htmlFor="keep-count">保留最近的检查点</Label>
           <div className="flex gap-2">
             <Input
               id="keep-count"
@@ -267,11 +267,11 @@ export const CheckpointSettings: React.FC<CheckpointSettingsProps> = ({
               disabled={isLoading || totalCheckpoints <= keepCount}
             >
               <Trash2 className="h-4 w-4 mr-2" />
-              Clean Up
+              清理
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
-            Remove old checkpoints, keeping only the most recent {keepCount}
+            删除旧的检查点，只保留最近的 {keepCount} 个
           </p>
         </div>
       </div>

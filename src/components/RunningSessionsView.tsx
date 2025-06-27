@@ -78,9 +78,9 @@ export function RunningSessionsView({ className, showBackButton = false, onBack 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'running':
-        return <Badge variant="default" className="bg-green-100 text-green-800 border-green-200">Running</Badge>;
+        return <Badge variant="default" className="bg-green-100 text-green-800 border-green-200">运行中</Badge>;
       case 'pending':
-        return <Badge variant="secondary">Pending</Badge>;
+        return <Badge variant="secondary">待处理</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -104,7 +104,7 @@ export function RunningSessionsView({ className, showBackButton = false, onBack 
       <div className={`flex items-center justify-center p-8 ${className}`}>
         <div className="flex items-center space-x-2">
           <RefreshCw className="h-4 w-4 animate-spin" />
-          <span>Loading running sessions...</span>
+          <span>正在加载运行中的会话...</span>
         </div>
       </div>
     );
@@ -125,7 +125,7 @@ export function RunningSessionsView({ className, showBackButton = false, onBack 
             </Button>
           )}
           <Play className="h-5 w-5" />
-          <h2 className="text-lg font-semibold">Running Agent Sessions</h2>
+          <h2 className="text-lg font-semibold">运行中的代理会话</h2>
           <Badge variant="secondary">{runningSessions.length}</Badge>
         </div>
         <Button
@@ -136,7 +136,7 @@ export function RunningSessionsView({ className, showBackButton = false, onBack 
           className="flex items-center space-x-2"
         >
           <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-          <span>Refresh</span>
+          <span>刷新</span>
         </Button>
       </div>
 
@@ -145,7 +145,7 @@ export function RunningSessionsView({ className, showBackButton = false, onBack 
           <CardContent className="flex items-center justify-center p-8">
             <div className="text-center space-y-2">
               <Clock className="h-8 w-8 mx-auto text-muted-foreground" />
-              <p className="text-muted-foreground">No agent sessions are currently running</p>
+              <p className="text-muted-foreground">当前没有运行中的代理会话</p>
             </div>
           </CardContent>
         </Card>
@@ -187,7 +187,7 @@ export function RunningSessionsView({ className, showBackButton = false, onBack 
                         className="flex items-center space-x-2"
                       >
                         <Eye className="h-4 w-4" />
-                        <span>View Output</span>
+                        <span>查看输出</span>
                       </Button>
                       <Button
                         variant="destructive"
@@ -196,7 +196,7 @@ export function RunningSessionsView({ className, showBackButton = false, onBack 
                         className="flex items-center space-x-2"
                       >
                         <Square className="h-4 w-4" />
-                        <span>Stop</span>
+                        <span>停止</span>
                       </Button>
                     </div>
                   </div>
@@ -204,21 +204,21 @@ export function RunningSessionsView({ className, showBackButton = false, onBack 
                 <CardContent className="pt-0">
                   <div className="space-y-2">
                     <div>
-                      <p className="text-sm text-muted-foreground">Task</p>
+                      <p className="text-sm text-muted-foreground">任务</p>
                       <p className="text-sm font-medium truncate">{session.task}</p>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <p className="text-muted-foreground">Model</p>
+                        <p className="text-muted-foreground">模型</p>
                         <p className="font-medium">{session.model}</p>
                       </div>
                       <div>
-                        <p className="text-muted-foreground">Duration</p>
+                        <p className="text-muted-foreground">持续时间</p>
                         <p className="font-medium">
                           {session.process_started_at 
                             ? formatDuration(session.process_started_at)
-                            : 'Unknown'
+                            : '未知'
                           }
                         </p>
                       </div>

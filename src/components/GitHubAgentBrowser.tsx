@@ -164,7 +164,7 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Globe className="h-5 w-5" />
-            Import Agent from GitHub
+            从 GitHub 导入代理
           </DialogTitle>
         </DialogHeader>
 
@@ -172,7 +172,7 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
           {/* Repository Info */}
           <div className="px-4 py-3 bg-muted/50 rounded-lg mb-4">
             <p className="text-sm text-muted-foreground">
-              Agents are fetched from{" "}
+              代理文件来自{" "}
               <button
                 onClick={handleGitHubLinkClick}
                 className="text-primary hover:underline inline-flex items-center gap-1"
@@ -182,7 +182,7 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
               </button>
             </p>
             <p className="text-sm text-muted-foreground mt-1">
-              You can contribute your custom agents to the repository!
+              您可以将您的自定义代理贡献到此仓库！
             </p>
           </div>
 
@@ -191,7 +191,7 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search agents..."
+                placeholder="搜索代理..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -210,14 +210,14 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
                 <AlertCircle className="h-12 w-12 text-destructive mb-4" />
                 <p className="text-sm text-muted-foreground mb-4">{error}</p>
                 <Button onClick={fetchAgents} variant="outline" size="sm">
-                  Try Again
+                  重试
                 </Button>
               </div>
             ) : filteredAgents.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-64 text-center">
                 <FileJson className="h-12 w-12 text-muted-foreground mb-4" />
                 <p className="text-sm text-muted-foreground">
-                  {searchQuery ? "No agents found matching your search" : "No agents available"}
+                  {searchQuery ? "没有找到匹配您搜索的代理" : "没有可用的代理"}
                 </p>
               </div>
             ) : (
@@ -250,7 +250,7 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
                             {isAgentImported(agent.name) && (
                               <Badge variant="secondary" className="ml-2 flex-shrink-0">
                                 <Check className="h-3 w-3 mr-1" />
-                                Imported
+                                已导入
                               </Badge>
                             )}
                           </div>
@@ -269,7 +269,7 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
                             }}
                           >
                             <Eye className="h-3 w-3 mr-2" />
-                            Preview
+                            预览
                           </Button>
                         </CardFooter>
                       </Card>
@@ -288,7 +288,7 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
           <Dialog open={!!selectedAgent} onOpenChange={() => setSelectedAgent(null)}>
             <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
               <DialogHeader>
-                <DialogTitle>Agent Preview</DialogTitle>
+                <DialogTitle>代理预览</DialogTitle>
               </DialogHeader>
 
               <div className="flex-1 overflow-y-auto">
@@ -315,7 +315,7 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
                         <div className="flex items-center gap-2 mt-1">
                           <Badge variant="outline">{selectedAgent.data.agent.model}</Badge>
                           {selectedAgent.data.agent.sandbox_enabled && (
-                            <Badge variant="secondary">Sandbox</Badge>
+                            <Badge variant="secondary">沙箱</Badge>
                           )}
                         </div>
                       </div>
@@ -323,7 +323,7 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
 
                     {/* System Prompt */}
                     <div>
-                      <h4 className="text-sm font-medium mb-2">System Prompt</h4>
+                      <h4 className="text-sm font-medium mb-2">系统提示</h4>
                       <div className="bg-muted rounded-lg p-3 max-h-48 overflow-y-auto">
                         <pre className="text-xs whitespace-pre-wrap font-mono">
                           {selectedAgent.data.agent.system_prompt}
@@ -334,7 +334,7 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
                     {/* Default Task */}
                     {selectedAgent.data.agent.default_task && (
                       <div>
-                        <h4 className="text-sm font-medium mb-2">Default Task</h4>
+                        <h4 className="text-sm font-medium mb-2">默认任务</h4>
                         <div className="bg-muted rounded-lg p-3">
                           <p className="text-sm">{selectedAgent.data.agent.default_task}</p>
                         </div>
@@ -343,24 +343,24 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
 
                     {/* Permissions */}
                     <div>
-                      <h4 className="text-sm font-medium mb-2">Permissions</h4>
+                      <h4 className="text-sm font-medium mb-2">权限</h4>
                       <div className="flex flex-wrap gap-2">
                         <Badge variant={selectedAgent.data.agent.enable_file_read ? "default" : "secondary"}>
-                          File Read: {selectedAgent.data.agent.enable_file_read ? "Yes" : "No"}
+                          文件读取: {selectedAgent.data.agent.enable_file_read ? "是" : "否"}
                         </Badge>
                         <Badge variant={selectedAgent.data.agent.enable_file_write ? "default" : "secondary"}>
-                          File Write: {selectedAgent.data.agent.enable_file_write ? "Yes" : "No"}
+                          文件写入: {selectedAgent.data.agent.enable_file_write ? "是" : "否"}
                         </Badge>
                         <Badge variant={selectedAgent.data.agent.enable_network ? "default" : "secondary"}>
-                          Network: {selectedAgent.data.agent.enable_network ? "Yes" : "No"}
+                          网络: {selectedAgent.data.agent.enable_network ? "是" : "否"}
                         </Badge>
                       </div>
                     </div>
 
                     {/* Metadata */}
                     <div className="text-xs text-muted-foreground">
-                      <p>Version: {selectedAgent.data.version}</p>
-                      <p>Exported: {new Date(selectedAgent.data.exported_at).toLocaleDateString()}</p>
+                      <p>版本: {selectedAgent.data.version}</p>
+                      <p>导出时间: {new Date(selectedAgent.data.exported_at).toLocaleDateString()}</p>
                     </div>
                   </div>
                 ) : null}
@@ -373,7 +373,7 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
                     variant="outline"
                     onClick={() => setSelectedAgent(null)}
                   >
-                    Cancel
+                    取消
                   </Button>
                   <Button
                     onClick={handleImportAgent}
@@ -382,17 +382,17 @@ export const GitHubAgentBrowser: React.FC<GitHubAgentBrowserProps> = ({
                     {importing ? (
                       <>
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Importing...
+                        正在导入...
                       </>
                     ) : isAgentImported(selectedAgent.file.name) ? (
                       <>
                         <Check className="h-4 w-4 mr-2" />
-                        Already Imported
+                        已导入
                       </>
                     ) : (
                       <>
                         <Download className="h-4 w-4 mr-2" />
-                        Import Agent
+                        导入代理
                       </>
                     )}
                   </Button>

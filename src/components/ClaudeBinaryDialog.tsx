@@ -39,7 +39,7 @@ export function ClaudeBinaryDialog({ open, onOpenChange, onSuccess, onError }: C
 
   const handleSave = async () => {
     if (!selectedInstallation) {
-      onError("Please select a Claude installation");
+      onError("请选择一个 Claude 安装");
       return;
     }
 
@@ -50,7 +50,7 @@ export function ClaudeBinaryDialog({ open, onOpenChange, onSuccess, onError }: C
       onOpenChange(false);
     } catch (error) {
       console.error("Failed to save Claude binary path:", error);
-      onError(error instanceof Error ? error.message : "Failed to save Claude binary path");
+      onError(error instanceof Error ? error.message : "保存 Claude 二进制路径失败");
     } finally {
       setIsValidating(false);
     }
@@ -62,29 +62,29 @@ export function ClaudeBinaryDialog({ open, onOpenChange, onSuccess, onError }: C
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <FileQuestion className="w-5 h-5" />
-            Select Claude Code Installation
+            选择 Claude Code 安装
           </DialogTitle>
           <DialogDescription className="space-y-3 mt-4">
             {checkingInstallations ? (
               <div className="flex items-center justify-center py-8">
                 <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                <span className="ml-2 text-sm text-muted-foreground">Searching for Claude installations...</span>
+                <span className="ml-2 text-sm text-muted-foreground">正在搜索 Claude 安装...</span>
               </div>
             ) : hasInstallations ? (
               <p>
-                Multiple Claude Code installations were found on your system. 
-                Please select which one you'd like to use.
+                在您的系统上找到了多个 Claude Code 安装。
+                请选择您想要使用的版本。
               </p>
             ) : (
               <>
                 <p>
-                  Claude Code was not found in any of the common installation locations. 
-                  Please install Claude Code to continue.
+                  在常见安装位置未找到 Claude Code。
+                  请安装 Claude Code 以继续。
                 </p>
                 <div className="flex items-center gap-2 p-3 bg-muted rounded-md">
                   <AlertCircle className="w-4 h-4 text-muted-foreground" />
                   <p className="text-sm text-muted-foreground">
-                    <span className="font-medium">Searched locations:</span> PATH, /usr/local/bin, 
+                    <span className="font-medium">已搜索位置：</span> PATH, /usr/local/bin,
                     /opt/homebrew/bin, ~/.nvm/versions/node/*/bin, ~/.claude/local, ~/.local/bin
                   </p>
                 </div>
@@ -94,8 +94,8 @@ export function ClaudeBinaryDialog({ open, onOpenChange, onSuccess, onError }: C
               <div className="flex items-center gap-2 p-3 bg-muted rounded-md">
                 <Terminal className="w-4 h-4 text-muted-foreground" />
                 <p className="text-sm text-muted-foreground">
-                  <span className="font-medium">Tip:</span> You can install Claude Code using{" "}
-                  <code className="px-1 py-0.5 bg-black/10 dark:bg-white/10 rounded">npm install -g @claude</code>
+                  <span className="font-medium">提示：</span> 您可以使用{" "}
+                  <code className="px-1 py-0.5 bg-black/10 dark:bg-white/10 rounded">npm install -g @claude</code> 安装 Claude Code
                 </p>
               </div>
             )}
@@ -118,20 +118,20 @@ export function ClaudeBinaryDialog({ open, onOpenChange, onSuccess, onError }: C
             className="mr-auto"
           >
             <ExternalLink className="w-4 h-4 mr-2" />
-            Installation Guide
+            安装指南
           </Button>
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isValidating}
           >
-            Cancel
+            取消
           </Button>
           <Button 
             onClick={handleSave} 
             disabled={isValidating || !selectedInstallation || !hasInstallations}
           >
-            {isValidating ? "Validating..." : hasInstallations ? "Save Selection" : "No Installations Found"}
+            {isValidating ? "验证中..." : hasInstallations ? "保存选择" : "未找到安装"}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -81,7 +81,7 @@ export const TimelineNavigator: React.FC<TimelineNavigatorProps> = ({
       }
     } catch (err) {
       console.error("Failed to load timeline:", err);
-      setError("Failed to load timeline");
+      setError("加载时间线失败");
     } finally {
       setIsLoading(false);
     }
@@ -381,9 +381,9 @@ export const TimelineNavigator: React.FC<TimelineNavigatorProps> = ({
         <div className="flex items-start gap-2">
           <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5" />
           <div className="text-xs">
-            <p className="font-medium text-yellow-600">Experimental Feature</p>
+            <p className="font-medium text-yellow-600">实验性功能</p>
             <p className="text-yellow-600/80">
-              Checkpointing may affect directory structure or cause data loss. Use with caution.
+              检查点可能影响目录结构或导致数据丢失。请谨慎使用。
             </p>
           </div>
         </div>
@@ -393,10 +393,10 @@ export const TimelineNavigator: React.FC<TimelineNavigatorProps> = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <GitBranch className="h-5 w-5 text-muted-foreground" />
-          <h3 className="text-sm font-medium">Timeline</h3>
+          <h3 className="text-sm font-medium">时间线</h3>
           {timeline && (
             <Badge variant="outline" className="text-xs">
-              {timeline.totalCheckpoints} checkpoints
+              {timeline.totalCheckpoints} 个检查点
             </Badge>
           )}
         </div>
@@ -408,7 +408,7 @@ export const TimelineNavigator: React.FC<TimelineNavigatorProps> = ({
           disabled={isLoading}
         >
           <Save className="h-3 w-3 mr-1" />
-          Checkpoint
+          检查点
         </Button>
       </div>
       
@@ -427,7 +427,7 @@ export const TimelineNavigator: React.FC<TimelineNavigatorProps> = ({
         </div>
       ) : (
         <div className="text-center py-8 text-sm text-muted-foreground">
-          {isLoading ? "Loading timeline..." : "No checkpoints yet"}
+          {isLoading ? "正在加载时间线..." : "尚未有检查点"}
         </div>
       )}
       
@@ -435,18 +435,18 @@ export const TimelineNavigator: React.FC<TimelineNavigatorProps> = ({
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create Checkpoint</DialogTitle>
+            <DialogTitle>创建检查点</DialogTitle>
             <DialogDescription>
-              Save the current state of your session with an optional description.
+              使用可选描述保存会话的当前状态。
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="description">Description (optional)</Label>
+              <Label htmlFor="description">描述 (可选)</Label>
               <Input
                 id="description"
-                placeholder="e.g., Before major refactoring"
+                placeholder="例如：重大重构前"
                 value={checkpointDescription}
                 onChange={(e) => setCheckpointDescription(e.target.value)}
                 onKeyPress={(e) => {
@@ -464,13 +464,13 @@ export const TimelineNavigator: React.FC<TimelineNavigatorProps> = ({
               onClick={() => setShowCreateDialog(false)}
               disabled={isLoading}
             >
-              Cancel
+              取消
             </Button>
             <Button
               onClick={handleCreateCheckpoint}
               disabled={isLoading}
             >
-              Create Checkpoint
+              创建检查点
             </Button>
           </DialogFooter>
         </DialogContent>

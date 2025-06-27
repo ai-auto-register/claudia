@@ -86,7 +86,7 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
       setCopiedServer(serverName);
       setTimeout(() => setCopiedServer(null), 2000);
     } catch (error) {
-      console.error("Failed to copy command:", error);
+      console.error("无法复制命令:", error);
     }
   };
 
@@ -99,7 +99,7 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
       await api.mcpRemove(name);
       onServerRemoved(name);
     } catch (error) {
-      console.error("Failed to remove server:", error);
+      console.error("无法移除服务器:", error);
     } finally {
       setRemovingServer(null);
     }
@@ -115,7 +115,7 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
       // TODO: Show result in a toast or modal
       console.log("Test result:", result);
     } catch (error) {
-      console.error("Failed to test connection:", error);
+      console.error("无法测试连接:", error);
     } finally {
       setTestingServer(null);
     }
@@ -157,11 +157,11 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
   const getScopeDisplayName = (scope: string) => {
     switch (scope) {
       case "local":
-        return "Local (Project-specific)";
+        return "本地 (特定项目)";
       case "project":
-        return "Project (Shared via .mcp.json)";
+        return "项目 (通过 .mcp.json 共享)";
       case "user":
-        return "User (All projects)";
+        return "用户 (所有项目)";
       default:
         return scope;
     }
@@ -193,7 +193,7 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
                 {server.status?.running && (
                   <Badge variant="outline" className="gap-1 flex-shrink-0 border-green-500/50 text-green-600 bg-green-500/10">
                     <CheckCircle className="h-3 w-3" />
-                    Running
+                    运行中
                   </Badge>
                 )}
               </div>
@@ -210,7 +210,7 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
                     className="h-6 px-2 text-xs hover:bg-primary/10"
                   >
                     <ChevronDown className="h-3 w-3 mr-1" />
-                    Show full
+                    显示全部
                   </Button>
                 </div>
               )}
@@ -225,7 +225,7 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
               
               {Object.keys(server.env).length > 0 && !isExpanded && (
                 <div className="flex items-center gap-1 text-xs text-muted-foreground pl-9">
-                  <span>Environment variables: {Object.keys(server.env).length}</span>
+                  <span>环境变量: {Object.keys(server.env).length}</span>
                 </div>
               )}
             </div>
@@ -272,7 +272,7 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
               {server.command && (
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-medium text-muted-foreground">Command</p>
+                    <p className="text-xs font-medium text-muted-foreground">命令</p>
                     <div className="flex items-center gap-1">
                       <Button
                         variant="ghost"
@@ -281,7 +281,7 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
                         className="h-6 px-2 text-xs hover:bg-primary/10"
                       >
                         <Copy className="h-3 w-3 mr-1" />
-                        {isCopied ? "Copied!" : "Copy"}
+                        {isCopied ? "已复制!" : "复制"}
                       </Button>
                       <Button
                         variant="ghost"
@@ -290,7 +290,7 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
                         className="h-6 px-2 text-xs hover:bg-primary/10"
                       >
                         <ChevronUp className="h-3 w-3 mr-1" />
-                        Hide
+                        隐藏
                       </Button>
                     </div>
                   </div>
@@ -302,7 +302,7 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
               
               {server.args && server.args.length > 0 && (
                 <div className="space-y-1">
-                  <p className="text-xs font-medium text-muted-foreground">Arguments</p>
+                  <p className="text-xs font-medium text-muted-foreground">参数</p>
                   <div className="text-xs font-mono bg-muted/50 p-2 rounded space-y-1">
                     {server.args.map((arg, idx) => (
                       <div key={idx} className="break-all">
@@ -325,7 +325,7 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
               
               {Object.keys(server.env).length > 0 && (
                 <div className="space-y-1">
-                  <p className="text-xs font-medium text-muted-foreground">Environment Variables</p>
+                  <p className="text-xs font-medium text-muted-foreground">环境变量</p>
                   <div className="text-xs font-mono bg-muted/50 p-2 rounded space-y-1">
                     {Object.entries(server.env).map(([key, value]) => (
                       <div key={key} className="break-all">
@@ -357,9 +357,9 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-base font-semibold">Configured Servers</h3>
+          <h3 className="text-base font-semibold">已配置的服务器</h3>
           <p className="text-sm text-muted-foreground">
-            {servers.length} server{servers.length !== 1 ? "s" : ""} configured
+            已配置 {servers.length} 个服务器
           </p>
         </div>
         <Button
@@ -369,7 +369,7 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
           className="gap-2 hover:bg-primary/10 hover:text-primary hover:border-primary/50"
         >
           <RefreshCw className="h-4 w-4" />
-          Refresh
+          刷新
         </Button>
       </div>
 
@@ -379,9 +379,9 @@ export const MCPServerList: React.FC<MCPServerListProps> = ({
           <div className="p-4 bg-primary/10 rounded-full mb-4">
             <Network className="h-12 w-12 text-primary" />
           </div>
-          <p className="text-muted-foreground mb-2 font-medium">No MCP servers configured</p>
+          <p className="text-muted-foreground mb-2 font-medium">未配置 MCP 服务器</p>
           <p className="text-sm text-muted-foreground">
-            Add a server to get started with Model Context Protocol
+            添加服务器以开始使用模型上下文协议
           </p>
         </div>
       ) : (

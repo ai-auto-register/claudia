@@ -9,26 +9,26 @@ import { formatUnixTimestamp } from "@/lib/date-utils";
 
 interface ClaudeMemoriesDropdownProps {
   /**
-   * The project path to search for CLAUDE.md files
+   * 用于搜索 CLAUDE.md 文件的项目路径
    */
   projectPath: string;
   /**
-   * Callback when an edit button is clicked
+   * 点击编辑按钮时的回调
    */
   onEditFile: (file: ClaudeMdFile) => void;
   /**
-   * Optional className for styling
+   * 可选的样式类名
    */
   className?: string;
 }
 
 /**
- * ClaudeMemoriesDropdown component - Shows all CLAUDE.md files in a project
- * 
+ * ClaudeMemoriesDropdown 组件 - 显示项目中的所有 CLAUDE.md 文件
+ *
  * @example
  * <ClaudeMemoriesDropdown
  *   projectPath="/Users/example/project"
- *   onEditFile={(file) => console.log('Edit file:', file)}
+ *   onEditFile={(file) => console.log('编辑文件:', file)}
  * />
  */
 export const ClaudeMemoriesDropdown: React.FC<ClaudeMemoriesDropdownProps> = ({
@@ -55,8 +55,8 @@ export const ClaudeMemoriesDropdown: React.FC<ClaudeMemoriesDropdownProps> = ({
       const foundFiles = await api.findClaudeMdFiles(projectPath);
       setFiles(foundFiles);
     } catch (err) {
-      console.error("Failed to load CLAUDE.md files:", err);
-      setError("Failed to load CLAUDE.md files");
+      console.error("加载 CLAUDE.md 文件失败:", err);
+      setError("加载 CLAUDE.md 文件失败");
     } finally {
       setLoading(false);
     }
@@ -78,7 +78,7 @@ export const ClaudeMemoriesDropdown: React.FC<ClaudeMemoriesDropdownProps> = ({
         >
           <div className="flex items-center space-x-2">
             <FileText className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-medium">CLAUDE.md Memories</span>
+            <span className="text-sm font-medium">CLAUDE.md 记忆</span>
             {files.length > 0 && !loading && (
               <span className="text-xs text-muted-foreground">({files.length})</span>
             )}
@@ -110,7 +110,7 @@ export const ClaudeMemoriesDropdown: React.FC<ClaudeMemoriesDropdownProps> = ({
                   <div className="p-3 text-xs text-destructive">{error}</div>
                 ) : files.length === 0 ? (
                   <div className="p-3 text-xs text-muted-foreground text-center">
-                    No CLAUDE.md files found in this project
+                    在此项目中未找到 CLAUDE.md 文件
                   </div>
                 ) : (
                   <div className="max-h-64 overflow-y-auto">
@@ -129,7 +129,7 @@ export const ClaudeMemoriesDropdown: React.FC<ClaudeMemoriesDropdownProps> = ({
                               {formatFileSize(file.size)}
                             </span>
                             <span className="text-xs text-muted-foreground">
-                              Modified {formatUnixTimestamp(file.modified)}
+                              修改于 {formatUnixTimestamp(file.modified)}
                             </span>
                           </div>
                         </div>

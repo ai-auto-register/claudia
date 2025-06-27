@@ -32,7 +32,7 @@ interface CreateAgentProps {
 }
 
 /**
- * CreateAgent component for creating or editing a CC agent
+ * CreateAgent 组件，用于创建或编辑 CC 代理
  * 
  * @example
  * <CreateAgent onBack={() => setView('list')} onAgentCreated={handleCreated} />
@@ -61,12 +61,12 @@ export const CreateAgent: React.FC<CreateAgentProps> = ({
 
   const handleSave = async () => {
     if (!name.trim()) {
-      setError("Agent name is required");
+      setError("代理名称是必填项");
       return;
     }
 
     if (!systemPrompt.trim()) {
-      setError("System prompt is required");
+      setError("系统提示是必填项");
       return;
     }
 
@@ -104,9 +104,9 @@ export const CreateAgent: React.FC<CreateAgentProps> = ({
       onAgentCreated();
     } catch (err) {
       console.error("Failed to save agent:", err);
-      setError(isEditMode ? "Failed to update agent" : "Failed to create agent");
+      setError(isEditMode ? "更新代理失败" : "创建代理失败");
       setToast({ 
-        message: isEditMode ? "Failed to update agent" : "Failed to create agent", 
+        message: isEditMode ? "更新代理失败" : "创建代理失败", 
         type: "error" 
       });
     } finally {
@@ -151,10 +151,10 @@ export const CreateAgent: React.FC<CreateAgentProps> = ({
             </Button>
             <div>
               <h2 className="text-lg font-semibold">
-                {isEditMode ? "Edit CC Agent" : "Create CC Agent"}
+                {isEditMode ? "编辑 CC 代理" : "创建 CC 代理"}
               </h2>
               <p className="text-xs text-muted-foreground">
-                {isEditMode ? "Update your Claude Code agent" : "Create a new Claude Code agent"}
+                {isEditMode ? "更新您的 Claude Code 代理" : "创建新的 Claude Code 代理"}
               </p>
             </div>
           </div>
@@ -169,7 +169,7 @@ export const CreateAgent: React.FC<CreateAgentProps> = ({
             ) : (
               <Save className="mr-2 h-4 w-4" />
             )}
-            {saving ? "Saving..." : "Save"}
+            {saving ? "正在保存..." : "保存"}
           </Button>
         </motion.div>
         
@@ -195,24 +195,24 @@ export const CreateAgent: React.FC<CreateAgentProps> = ({
             {/* Basic Information */}
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-medium mb-4">Basic Information</h3>
+                <h3 className="text-sm font-medium mb-4">基本信息</h3>
               </div>
               
               {/* Name and Icon */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Agent Name</Label>
+                  <Label htmlFor="name">代理名称</Label>
                   <Input
                     id="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g., Code Assistant"
+                    placeholder="例如：代码助手"
                     required
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label>Agent Icon</Label>
+                  <Label>代理图标</Label>
                   <div
                     onClick={() => setShowIconPicker(true)}
                     className="h-10 px-3 py-2 bg-background border border-input rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors flex items-center justify-between"
@@ -235,7 +235,7 @@ export const CreateAgent: React.FC<CreateAgentProps> = ({
 
               {/* Model Selection */}
               <div className="space-y-2">
-                <Label>Model</Label>
+                <Label>模型</Label>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
                     type="button"
@@ -259,7 +259,7 @@ export const CreateAgent: React.FC<CreateAgentProps> = ({
                       </div>
                       <div className="text-left">
                         <div className="text-sm font-semibold">Claude 4 Sonnet</div>
-                        <div className="text-xs opacity-80">Faster, efficient for most tasks</div>
+                        <div className="text-xs opacity-80">更快，对大多数任务更高效</div>
                       </div>
                     </div>
                   </button>
@@ -286,7 +286,7 @@ export const CreateAgent: React.FC<CreateAgentProps> = ({
                       </div>
                       <div className="text-left">
                         <div className="text-sm font-semibold">Claude 4 Opus</div>
-                        <div className="text-xs opacity-80">More capable, better for complex tasks</div>
+                        <div className="text-xs opacity-80">能力更强，更适合复杂任务</div>
                       </div>
                     </div>
                   </button>
@@ -295,17 +295,17 @@ export const CreateAgent: React.FC<CreateAgentProps> = ({
 
               {/* Default Task */}
               <div className="space-y-2">
-                <Label htmlFor="default-task">Default Task (Optional)</Label>
+                <Label htmlFor="default-task">默认任务 (可选)</Label>
                 <Input
                   id="default-task"
                   type="text"
-                  placeholder="e.g., Review this code for security issues"
+                  placeholder="例如：审查此代码是否存在安全问题"
                   value={defaultTask}
                   onChange={(e) => setDefaultTask(e.target.value)}
                   className="max-w-md"
                 />
                 <p className="text-xs text-muted-foreground">
-                  This will be used as the default task placeholder when executing the agent
+                  这将在执行代理时用作默认任务占位符
                 </p>
               </div>
 
@@ -335,9 +335,9 @@ export const CreateAgent: React.FC<CreateAgentProps> = ({
 
               {/* System Prompt Editor */}
               <div className="space-y-2">
-                <Label>System Prompt</Label>
+                <Label>系统提示</Label>
                 <p className="text-xs text-muted-foreground mb-2">
-                  Define the behavior and capabilities of your CC Agent
+                  定义您的 CC 代理的行为和能力
                 </p>
                 <div className="rounded-lg border border-border overflow-hidden shadow-sm" data-color-mode="dark">
                   <MDEditor

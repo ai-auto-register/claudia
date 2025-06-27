@@ -28,12 +28,12 @@ interface AgentRunsListProps {
 const ITEMS_PER_PAGE = 5;
 
 /**
- * AgentRunsList component - Displays a paginated list of agent execution runs
+ * AgentRunsList 组件 - 显示分页的代理执行运行列表
  * 
  * @example
  * <AgentRunsList
  *   runs={runs}
- *   onRunClick={(run) => console.log('Selected:', run)}
+ *   onRunClick={(run) => console.log('已选择:', run)}
  * />
  */
 export const AgentRunsList: React.FC<AgentRunsListProps> = ({
@@ -91,7 +91,7 @@ export const AgentRunsList: React.FC<AgentRunsListProps> = ({
     return (
       <div className={cn("text-center py-8 text-muted-foreground", className)}>
         <Play className="h-8 w-8 mx-auto mb-2 opacity-50" />
-        <p className="text-sm">No execution history yet</p>
+        <p className="text-sm">尚无执行历史</p>
       </div>
     );
   }
@@ -133,7 +133,7 @@ export const AgentRunsList: React.FC<AgentRunsListProps> = ({
                         {run.status === "running" && (
                           <div className="flex items-center gap-1">
                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                            <span className="text-xs text-green-600 font-medium">Running</span>
+                            <span className="text-xs text-green-600 font-medium">运行中</span>
                           </div>
                         )}
                       </div>
@@ -171,10 +171,10 @@ export const AgentRunsList: React.FC<AgentRunsListProps> = ({
                         }
                         className="text-xs"
                       >
-                        {run.status === "completed" ? "Completed" :
-                         run.status === "running" ? "Running" :
-                         run.status === "failed" ? "Failed" :
-                         "Pending"}
+                        {run.status === "completed" ? "已完成" :
+                         run.status === "running" ? "运行中" :
+                         run.status === "failed" ? "失败" :
+                         "待处理"}
                       </Badge>
                     </div>
                   </div>

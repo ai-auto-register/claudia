@@ -14,8 +14,8 @@ interface AgentSandboxSettingsProps {
 }
 
 /**
- * Component for managing per-agent sandbox permissions
- * Provides simple toggles for sandbox enable/disable and file/network permissions
+ * 用于管理每个代理的沙箱权限的组件
+ * 提供简单的切换开关来启用/禁用沙箱以及文件/网络权限
  */
 export const AgentSandboxSettings: React.FC<AgentSandboxSettingsProps> = ({ 
   agent, 
@@ -30,10 +30,10 @@ export const AgentSandboxSettings: React.FC<AgentSandboxSettingsProps> = ({
     <Card className={cn("p-4 space-y-4", className)}>
       <div className="flex items-center gap-2">
         <Shield className="h-5 w-5 text-amber-500" />
-        <h4 className="font-semibold">Sandbox Permissions</h4>
+        <h4 className="font-semibold">沙箱权限</h4>
         {!agent.sandbox_enabled && (
           <Badge variant="secondary" className="text-xs">
-            Disabled
+            已禁用
           </Badge>
         )}
       </div>
@@ -42,9 +42,9 @@ export const AgentSandboxSettings: React.FC<AgentSandboxSettingsProps> = ({
         {/* Master sandbox toggle */}
         <div className="flex items-center justify-between p-3 rounded-lg border bg-muted/30">
           <div className="space-y-1">
-            <Label className="text-sm font-medium">Enable Sandbox</Label>
+            <Label className="text-sm font-medium">启用沙箱</Label>
             <p className="text-xs text-muted-foreground">
-              Run this agent in a secure sandbox environment
+              在安全的沙箱环境中运行此代理
             </p>
           </div>
           <Switch 
@@ -60,9 +60,9 @@ export const AgentSandboxSettings: React.FC<AgentSandboxSettingsProps> = ({
               <div className="flex items-center gap-2">
                 <FileText className="h-4 w-4 text-blue-500" />
                 <div>
-                  <Label className="text-sm font-medium">File Read Access</Label>
+                  <Label className="text-sm font-medium">文件读取权限</Label>
                   <p className="text-xs text-muted-foreground">
-                    Allow reading files and directories
+                    允许读取文件和目录
                   </p>
                 </div>
               </div>
@@ -76,9 +76,9 @@ export const AgentSandboxSettings: React.FC<AgentSandboxSettingsProps> = ({
               <div className="flex items-center gap-2">
                 <Upload className="h-4 w-4 text-green-500" />
                 <div>
-                  <Label className="text-sm font-medium">File Write Access</Label>
+                  <Label className="text-sm font-medium">文件写入权限</Label>
                   <p className="text-xs text-muted-foreground">
-                    Allow creating and modifying files
+                    允许创建和修改文件
                   </p>
                 </div>
               </div>
@@ -92,9 +92,9 @@ export const AgentSandboxSettings: React.FC<AgentSandboxSettingsProps> = ({
               <div className="flex items-center gap-2">
                 <Network className="h-4 w-4 text-purple-500" />
                 <div>
-                  <Label className="text-sm font-medium">Network Access</Label>
+                  <Label className="text-sm font-medium">网络访问权限</Label>
                   <p className="text-xs text-muted-foreground">
-                    Allow outbound network connections
+                    允许出站网络连接
                   </p>
                 </div>
               </div>
@@ -111,8 +111,8 @@ export const AgentSandboxSettings: React.FC<AgentSandboxSettingsProps> = ({
           <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 dark:bg-amber-950/50 dark:border-amber-800 dark:text-amber-200">
             <AlertTriangle className="h-4 w-4 mt-0.5 flex-shrink-0" />
             <div className="text-xs">
-              <p className="font-medium">Sandbox Disabled</p>
-              <p>This agent will run with full system access. Use with caution.</p>
+              <p className="font-medium">沙箱已禁用</p>
+              <p>此代理将以完整的系统访问权限运行。请谨慎使用。</p>
             </div>
           </div>
         )}

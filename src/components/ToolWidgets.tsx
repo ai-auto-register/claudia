@@ -55,7 +55,7 @@ import ReactMarkdown from "react-markdown";
 import { open } from "@tauri-apps/plugin-shell";
 
 /**
- * Widget for TodoWrite tool - displays a beautiful TODO list
+ * TodoWrite 工具的组件 - 显示一个漂亮的待办事项列表
  */
 export const TodoWidget: React.FC<{ todos: any[]; result?: any }> = ({ todos, result: _result }) => {
   const statusIcons = {
@@ -74,7 +74,7 @@ export const TodoWidget: React.FC<{ todos: any[]; result?: any }> = ({ todos, re
     <div className="space-y-2">
       <div className="flex items-center gap-2 mb-3">
         <FileEdit className="h-4 w-4 text-primary" />
-        <span className="text-sm font-medium">Todo List</span>
+        <span className="text-sm font-medium">待办事项列表</span>
       </div>
       <div className="space-y-2">
         {todos.map((todo, idx) => (
@@ -112,7 +112,7 @@ export const TodoWidget: React.FC<{ todos: any[]; result?: any }> = ({ todos, re
 };
 
 /**
- * Widget for LS (List Directory) tool
+ * LS (List Directory) 工具的组件
  */
 export const LSWidget: React.FC<{ path: string; result?: any }> = ({ path, result }) => {
   // If we have a result, show it using the LSResultWidget
@@ -136,7 +136,7 @@ export const LSWidget: React.FC<{ path: string; result?: any }> = ({ path, resul
       <div className="space-y-2">
         <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50">
           <FolderOpen className="h-4 w-4 text-primary" />
-          <span className="text-sm">Directory contents for:</span>
+          <span className="text-sm">目录内容:</span>
           <code className="text-sm font-mono bg-background px-2 py-0.5 rounded">
             {path}
           </code>
@@ -149,27 +149,28 @@ export const LSWidget: React.FC<{ path: string; result?: any }> = ({ path, resul
   return (
     <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50">
       <FolderOpen className="h-4 w-4 text-primary" />
-      <span className="text-sm">Listing directory:</span>
+      <span className="text-sm">正在列出目录:</span>
       <code className="text-sm font-mono bg-background px-2 py-0.5 rounded">
         {path}
       </code>
       {!result && (
         <div className="ml-auto flex items-center gap-1 text-xs text-muted-foreground">
           <div className="h-2 w-2 bg-blue-500 rounded-full animate-pulse" />
-          <span>Loading...</span>
+          <span>加载中...</span>
         </div>
       )}
     </div>
   );
 };
 
+
 /**
- * Widget for LS tool result - displays directory tree structure
+ * LS工具结果的组件 - 显示目录树结构
  */
 export const LSResultWidget: React.FC<{ content: string }> = ({ content }) => {
   const [expandedDirs, setExpandedDirs] = useState<Set<string>>(new Set());
   
-  // Parse the directory tree structure
+  // 解析目录树结构
   const parseDirectoryTree = (rawContent: string) => {
     const lines = rawContent.split('\n');
     const entries: Array<{
@@ -182,19 +183,19 @@ export const LSResultWidget: React.FC<{ content: string }> = ({ content }) => {
     let currentPath: string[] = [];
     
     for (const line of lines) {
-      // Skip NOTE section and everything after it
+      // 跳过NOTE部分及其后的所有内容
       if (line.startsWith('NOTE:')) {
         break;
       }
       
-      // Skip empty lines
+      // 跳过空行
       if (!line.trim()) continue;
       
-      // Calculate indentation level
+      // 计算缩进级别
       const indent = line.match(/^(\s*)/)?.[1] || '';
       const level = Math.floor(indent.length / 2);
       
-      // Extract the entry name
+      // 提取条目名称
       const entryMatch = line.match(/^\s*-\s+(.+?)(\/$)?$/);
       if (!entryMatch) continue;
       
@@ -202,7 +203,7 @@ export const LSResultWidget: React.FC<{ content: string }> = ({ content }) => {
       const isDirectory = line.trim().endsWith('/');
       const name = isDirectory ? fullName : fullName;
       
-      // Update current path based on level
+      // 根据级别更新当前路径
       currentPath = currentPath.slice(0, level);
       currentPath.push(name);
       
@@ -231,17 +232,17 @@ export const LSResultWidget: React.FC<{ content: string }> = ({ content }) => {
     });
   };
   
-  // Group entries by parent for collapsible display
+  // 按父级对条目进行分组以便可折叠显示
   const getChildren = (parentPath: string, parentLevel: number) => {
     return entries.filter(e => {
       if (e.level !== parentLevel + 1) return false;
       const parentParts = parentPath.split('/').filter(Boolean);
       const entryParts = e.path.split('/').filter(Boolean);
       
-      // Check if this entry is a direct child of the parent
+      // 检查此条目是否为父级的直接子项
       if (entryParts.length !== parentParts.length + 1) return false;
       
-      // Check if all parent parts match
+      // 检查所有父级部分是否匹配
       for (let i = 0; i < parentParts.length; i++) {
         if (parentParts[i] !== entryParts[i]) return false;
       }
@@ -262,7 +263,7 @@ export const LSResultWidget: React.FC<{ content: string }> = ({ content }) => {
           <Folder className="h-3.5 w-3.5 text-blue-500" />;
       }
       
-      // File type icons based on extension
+      // 基于扩展名的文件类型图标
       const ext = entry.name.split('.').pop()?.toLowerCase();
       switch (ext) {
         case 'rs':
@@ -322,7 +323,7 @@ export const LSResultWidget: React.FC<{ content: string }> = ({ content }) => {
     );
   };
   
-  // Get root entries
+  // 获取根条目
   const rootEntries = entries.filter(e => e.level === 0);
   
   return (
@@ -335,7 +336,7 @@ export const LSResultWidget: React.FC<{ content: string }> = ({ content }) => {
 };
 
 /**
- * Widget for Read tool
+ * Read 工具的组件
  */
 export const ReadWidget: React.FC<{ filePath: string; result?: any }> = ({ filePath, result }) => {
   // If we have a result, show it using the ReadResultWidget
@@ -359,7 +360,7 @@ export const ReadWidget: React.FC<{ filePath: string; result?: any }> = ({ fileP
       <div className="space-y-2">
         <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50">
           <FileText className="h-4 w-4 text-primary" />
-          <span className="text-sm">File content:</span>
+          <span className="text-sm">文件内容:</span>
           <code className="text-sm font-mono bg-background px-2 py-0.5 rounded flex-1 truncate">
             {filePath}
           </code>
@@ -372,22 +373,23 @@ export const ReadWidget: React.FC<{ filePath: string; result?: any }> = ({ fileP
   return (
     <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50">
       <FileText className="h-4 w-4 text-primary" />
-      <span className="text-sm">Reading file:</span>
+      <span className="text-sm">正在读取文件:</span>
       <code className="text-sm font-mono bg-background px-2 py-0.5 rounded flex-1 truncate">
         {filePath}
       </code>
       {!result && (
         <div className="ml-auto flex items-center gap-1 text-xs text-muted-foreground">
           <div className="h-2 w-2 bg-blue-500 rounded-full animate-pulse" />
-          <span>Loading...</span>
+          <span>加载中...</span>
         </div>
       )}
     </div>
   );
 };
 
+
 /**
- * Widget for Read tool result - shows file content with line numbers
+ * Read 工具结果的组件 - 显示带行号的文件内容
  */
 export const ReadResultWidget: React.FC<{ content: string; filePath?: string }> = ({ content, filePath }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -498,11 +500,11 @@ export const ReadResultWidget: React.FC<{ content: string; filePath?: string }> 
         <div className="flex items-center gap-2">
           <FileText className="h-3.5 w-3.5 text-muted-foreground" />
           <span className="text-xs font-mono text-muted-foreground">
-            {filePath || "File content"}
+            {filePath || "文件内容"}
           </span>
           {isLargeFile && (
             <span className="text-xs text-muted-foreground">
-              ({lineCount} lines)
+              ({lineCount} 行)
             </span>
           )}
         </div>
@@ -512,7 +514,7 @@ export const ReadResultWidget: React.FC<{ content: string; filePath?: string }> 
             className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             <ChevronRight className={cn("h-3 w-3 transition-transform", isExpanded && "rotate-90")} />
-            {isExpanded ? "Collapse" : "Expand"}
+            {isExpanded ? "折叠" : "展开"}
           </button>
         )}
       </div>
@@ -549,7 +551,7 @@ export const ReadResultWidget: React.FC<{ content: string; filePath?: string }> 
       
       {isLargeFile && !isExpanded && (
         <div className="px-4 py-3 text-xs text-muted-foreground text-center bg-zinc-900/30">
-          Click "Expand" to view the full file
+          点击 "展开" 查看完整文件
         </div>
       )}
     </div>
@@ -557,7 +559,7 @@ export const ReadResultWidget: React.FC<{ content: string; filePath?: string }> 
 };
 
 /**
- * Widget for Glob tool
+ * Glob 工具的组件
  */
 export const GlobWidget: React.FC<{ pattern: string; result?: any }> = ({ pattern, result }) => {
   // Extract result content if available
@@ -585,14 +587,14 @@ export const GlobWidget: React.FC<{ pattern: string; result?: any }> = ({ patter
     <div className="space-y-2">
       <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50">
         <Search className="h-4 w-4 text-primary" />
-        <span className="text-sm">Searching for pattern:</span>
+        <span className="text-sm">正在搜索模式:</span>
         <code className="text-sm font-mono bg-background px-2 py-0.5 rounded">
           {pattern}
         </code>
         {!result && (
           <div className="ml-auto flex items-center gap-1 text-xs text-muted-foreground">
             <div className="h-2 w-2 bg-blue-500 rounded-full animate-pulse" />
-            <span>Searching...</span>
+            <span>正在搜索...</span>
           </div>
         )}
       </div>
@@ -605,7 +607,7 @@ export const GlobWidget: React.FC<{ pattern: string; result?: any }> = ({ patter
             ? "border-red-500/20 bg-red-500/5 text-red-400" 
             : "border-green-500/20 bg-green-500/5 text-green-300"
         )}>
-          {resultContent || (isError ? "Search failed" : "No matches found")}
+          {resultContent || (isError ? "搜索失败" : "没有找到匹配项")}
         </div>
       )}
     </div>
@@ -613,14 +615,14 @@ export const GlobWidget: React.FC<{ pattern: string; result?: any }> = ({ patter
 };
 
 /**
- * Widget for Bash tool
+ * Bash工具的组件
  */
 export const BashWidget: React.FC<{ 
   command: string; 
   description?: string;
   result?: any;
 }> = ({ command, description, result }) => {
-  // Extract result content if available
+  // 提取结果内容（如果可用）
   let resultContent = '';
   let isError = false;
   
@@ -645,18 +647,18 @@ export const BashWidget: React.FC<{
     <div className="rounded-lg border bg-zinc-950 overflow-hidden">
       <div className="px-4 py-2 bg-zinc-900/50 flex items-center gap-2 border-b">
         <Terminal className="h-3.5 w-3.5 text-green-500" />
-        <span className="text-xs font-mono text-muted-foreground">Terminal</span>
+        <span className="text-xs font-mono text-muted-foreground">终端</span>
         {description && (
           <>
             <ChevronRight className="h-3 w-3 text-muted-foreground" />
             <span className="text-xs text-muted-foreground">{description}</span>
           </>
         )}
-        {/* Show loading indicator when no result yet */}
+        {/* 当尚无结果时显示加载指示器 */}
         {!result && (
           <div className="ml-auto flex items-center gap-1 text-xs text-muted-foreground">
             <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
-            <span>Running...</span>
+            <span>正在运行...</span>
           </div>
         )}
       </div>
@@ -665,7 +667,7 @@ export const BashWidget: React.FC<{
           $ {command}
         </code>
         
-        {/* Show result if available */}
+        {/* 显示结果（如果可用） */}
         {result && (
           <div className={cn(
             "mt-3 p-3 rounded-md border text-xs font-mono whitespace-pre-wrap overflow-x-auto",
@@ -673,7 +675,7 @@ export const BashWidget: React.FC<{
               ? "border-red-500/20 bg-red-500/5 text-red-400" 
               : "border-green-500/20 bg-green-500/5 text-green-300"
           )}>
-            {resultContent || (isError ? "Command failed" : "Command completed")}
+            {resultContent || (isError ? "命令失败" : "命令完成")}
           </div>
         )}
       </div>
@@ -682,7 +684,7 @@ export const BashWidget: React.FC<{
 };
 
 /**
- * Widget for Write tool
+ * Write 工具的组件
  */
 export const WriteWidget: React.FC<{ filePath: string; content: string; result?: any }> = ({ filePath, content, result: _result }) => {
   const [isMaximized, setIsMaximized] = useState(false);
@@ -798,11 +800,11 @@ export const WriteWidget: React.FC<{ filePath: string; content: string; result?:
       }}
     >
       <div className="px-4 py-2 border-b bg-zinc-950 flex items-center justify-between sticky top-0 z-10">
-        <span className="text-xs font-mono text-muted-foreground">Preview</span>
+        <span className="text-xs font-mono text-muted-foreground">预览</span>
         {isLargeContent && truncated && (
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-xs whitespace-nowrap">
-              Truncated to 1000 chars
+              已截断为 1000 个字符
             </Badge>
             <Button 
               variant="ghost" 
@@ -839,7 +841,7 @@ export const WriteWidget: React.FC<{ filePath: string; content: string; result?:
     <div className="space-y-2">
       <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50">
         <FileEdit className="h-4 w-4 text-primary" />
-        <span className="text-sm">Writing to file:</span>
+        <span className="text-sm">正在写入文件:</span>
         <code className="text-sm font-mono bg-background px-2 py-0.5 rounded flex-1 truncate">
           {filePath}
         </code>
@@ -851,7 +853,7 @@ export const WriteWidget: React.FC<{ filePath: string; content: string; result?:
 };
 
 /**
- * Widget for Grep tool
+ * Grep工具的组件
  */
 export const GrepWidget: React.FC<{ 
   pattern: string; 
@@ -862,7 +864,7 @@ export const GrepWidget: React.FC<{
 }> = ({ pattern, include, path, exclude, result }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   
-  // Extract result content if available
+  // 提取结果内容（如果可用）
   let resultContent = '';
   let isError = false;
   
@@ -883,7 +885,7 @@ export const GrepWidget: React.FC<{
     }
   }
   
-  // Parse grep results to extract file paths and matches
+  // 解析grep结果以提取文件路径和匹配项
   const parseGrepResults = (content: string) => {
     const lines = content.split('\n').filter(line => line.trim());
     const results: Array<{
@@ -893,7 +895,7 @@ export const GrepWidget: React.FC<{
     }> = [];
     
     lines.forEach(line => {
-      // Common grep output format: filename:lineNumber:content
+      // 常见的grep输出格式：文件名:行号:内容
       const match = line.match(/^(.+?):(\d+):(.*)$/);
       if (match) {
         results.push({
@@ -913,35 +915,35 @@ export const GrepWidget: React.FC<{
     <div className="space-y-2">
       <div className="flex items-center gap-2 p-3 rounded-lg bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20">
         <Search className="h-4 w-4 text-emerald-500" />
-        <span className="text-sm font-medium">Searching with grep</span>
+        <span className="text-sm font-medium">正在使用 grep 搜索</span>
         {!result && (
           <div className="ml-auto flex items-center gap-1 text-xs text-muted-foreground">
             <div className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse" />
-            <span>Searching...</span>
+            <span>搜索中...</span>
           </div>
         )}
       </div>
       
-      {/* Search Parameters */}
+      {/* 搜索参数 */}
       <div className="rounded-lg border bg-muted/20 p-3 space-y-2">
         <div className="grid gap-2">
-          {/* Pattern with regex highlighting */}
+          {/* 带有正则表达式高亮的模式 */}
           <div className="flex items-start gap-3">
             <div className="flex items-center gap-1.5 min-w-[80px]">
               <Code className="h-3 w-3 text-emerald-500" />
-              <span className="text-xs font-medium text-muted-foreground">Pattern</span>
+              <span className="text-xs font-medium text-muted-foreground">模式</span>
             </div>
             <code className="flex-1 font-mono text-sm bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-md text-emerald-600 dark:text-emerald-400">
               {pattern}
             </code>
           </div>
           
-          {/* Path */}
+          {/* 路径 */}
           {path && (
             <div className="flex items-start gap-3">
               <div className="flex items-center gap-1.5 min-w-[80px]">
                 <FolderOpen className="h-3 w-3 text-muted-foreground" />
-                <span className="text-xs font-medium text-muted-foreground">Path</span>
+                <span className="text-xs font-medium text-muted-foreground">路径</span>
               </div>
               <code className="flex-1 font-mono text-xs bg-muted px-2 py-1 rounded truncate">
                 {path}
@@ -949,14 +951,14 @@ export const GrepWidget: React.FC<{
             </div>
           )}
           
-          {/* Include/Exclude patterns in a row */}
+          {/* 在一行中显示包含/排除模式 */}
           {(include || exclude) && (
             <div className="flex gap-4">
               {include && (
                 <div className="flex items-center gap-2 flex-1">
                   <div className="flex items-center gap-1.5">
                     <FilePlus className="h-3 w-3 text-green-500" />
-                    <span className="text-xs font-medium text-muted-foreground">Include</span>
+                    <span className="text-xs font-medium text-muted-foreground">包含</span>
                   </div>
                   <code className="font-mono text-xs bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded text-green-600 dark:text-green-400">
                     {include}
@@ -968,7 +970,7 @@ export const GrepWidget: React.FC<{
                 <div className="flex items-center gap-2 flex-1">
                   <div className="flex items-center gap-1.5">
                     <X className="h-3 w-3 text-red-500" />
-                    <span className="text-xs font-medium text-muted-foreground">Exclude</span>
+                    <span className="text-xs font-medium text-muted-foreground">排除</span>
                   </div>
                   <code className="font-mono text-xs bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded text-red-600 dark:text-red-400">
                     {exclude}
@@ -980,14 +982,14 @@ export const GrepWidget: React.FC<{
         </div>
       </div>
       
-      {/* Results */}
+      {/* 结果 */}
       {result && (
         <div className="space-y-2">
           {isError ? (
             <div className="flex items-center gap-3 p-4 rounded-lg bg-red-500/10 border border-red-500/20">
               <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
               <div className="text-sm text-red-600 dark:text-red-400">
-                {resultContent || "Search failed"}
+                {resultContent || "搜索失败"}
               </div>
             </div>
           ) : grepResults.length > 0 ? (
@@ -1001,7 +1003,7 @@ export const GrepWidget: React.FC<{
                 ) : (
                   <ChevronRight className="h-3.5 w-3.5" />
                 )}
-                <span>{grepResults.length} matches found</span>
+                <span>找到 {grepResults.length} 个匹配项</span>
               </button>
               
               {isExpanded && (
@@ -1052,7 +1054,7 @@ export const GrepWidget: React.FC<{
             <div className="flex items-center gap-3 p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
               <Info className="h-5 w-5 text-amber-500 flex-shrink-0" />
               <div className="text-sm text-amber-600 dark:text-amber-400">
-                No matches found for the given pattern.
+                未找到与给定模式匹配的内容。
               </div>
             </div>
           )}
@@ -1104,7 +1106,7 @@ const getLanguage = (path: string) => {
 };
 
 /**
- * Widget for Edit tool - shows the edit operation
+ * Edit工具的组件 - 显示编辑操作
  */
 export const EditWidget: React.FC<{ 
   file_path: string; 
@@ -1123,7 +1125,7 @@ export const EditWidget: React.FC<{
     <div className="space-y-2">
       <div className="flex items-center gap-2 mb-2">
         <FileEdit className="h-4 w-4 text-primary" />
-        <span className="text-sm font-medium">Applying Edit to:</span>
+        <span className="text-sm font-medium">正在应用编辑到：</span>
         <code className="text-sm font-mono bg-background px-2 py-0.5 rounded flex-1 truncate">
           {file_path}
         </code>
@@ -1141,7 +1143,7 @@ export const EditWidget: React.FC<{
             if (!part.added && !part.removed && part.count && part.count > 8) {
               return (
                 <div key={index} className="px-4 py-1 bg-zinc-900 border-y border-zinc-800 text-center text-zinc-500 text-xs">
-                  ... {part.count} unchanged lines ...
+                  ... {part.count} 行未更改 ...
                 </div>
               );
             }
@@ -1184,10 +1186,10 @@ export const EditWidget: React.FC<{
 };
 
 /**
- * Widget for Edit tool result - shows a diff view
+ * Edit工具结果的组件 - 显示差异视图
  */
 export const EditResultWidget: React.FC<{ content: string }> = ({ content }) => {
-  // Parse the content to extract file path and code snippet
+  // 解析内容以提取文件路径和代码片段
   const lines = content.split('\n');
   let filePath = '';
   const codeLines: { lineNumber: string; code: string }[] = [];
@@ -1211,7 +1213,7 @@ export const EditResultWidget: React.FC<{ content: string }> = ({ content }) => 
         });
       }
     } else if (inCodeBlock) {
-      // Allow non-numbered lines inside a code block (for empty lines)
+      // 允许代码块内的非编号行（用于空行）
       codeLines.push({ lineNumber: '', code: line });
     }
   }
@@ -1225,7 +1227,7 @@ export const EditResultWidget: React.FC<{ content: string }> = ({ content }) => 
     <div className="rounded-lg border bg-zinc-950 overflow-hidden">
       <div className="px-4 py-2 border-b bg-emerald-950/30 flex items-center gap-2">
         <GitBranch className="h-3.5 w-3.5 text-emerald-500" />
-        <span className="text-xs font-mono text-emerald-400">Edit Result</span>
+        <span className="text-xs font-mono text-emerald-400">编辑结果</span>
         {filePath && (
           <>
             <ChevronRight className="h-3 w-3 text-muted-foreground" />
@@ -1265,7 +1267,7 @@ export const EditResultWidget: React.FC<{ content: string }> = ({ content }) => 
 };
 
 /**
- * Widget for MCP (Model Context Protocol) tools
+ * MCP（模型上下文协议）工具的组件
  */
 export const MCPWidget: React.FC<{ 
   toolName: string; 
@@ -1274,13 +1276,13 @@ export const MCPWidget: React.FC<{
 }> = ({ toolName, input, result: _result }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
-  // Parse the tool name to extract components
-  // Format: mcp__namespace__method
+  // 解析工具名称以提取组件
+  // 格式：mcp__namespace__method
   const parts = toolName.split('__');
   const namespace = parts[1] || '';
   const method = parts[2] || '';
   
-  // Format namespace for display (handle kebab-case and snake_case)
+  // 格式化命名空间以供显示（处理kebab-case和snake_case）
   const formatNamespace = (ns: string) => {
     return ns
       .replace(/-/g, ' ')
@@ -1290,7 +1292,7 @@ export const MCPWidget: React.FC<{
       .join(' ');
   };
   
-  // Format method name
+  // 格式化方法名称
   const formatMethod = (m: string) => {
     return m
       .replace(/_/g, ' ')
@@ -1303,9 +1305,9 @@ export const MCPWidget: React.FC<{
   const inputString = hasInput ? JSON.stringify(input, null, 2) : '';
   const isLargeInput = inputString.length > 200;
   
-  // Count tokens approximation (very rough estimate)
+  // 计算token数量的近似值（非常粗略的估计）
   const estimateTokens = (str: string) => {
-    // Rough approximation: ~4 characters per token
+    // 粗略估计：约4个字符/token
     return Math.ceil(str.length / 4);
   };
   
@@ -1313,7 +1315,7 @@ export const MCPWidget: React.FC<{
 
   return (
     <div className="rounded-lg border border-violet-500/20 bg-gradient-to-br from-violet-500/5 to-purple-500/5 overflow-hidden">
-      {/* Header */}
+      {/* 头部 */}
       <div className="px-4 py-3 bg-gradient-to-r from-violet-500/10 to-purple-500/10 border-b border-violet-500/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -1321,7 +1323,7 @@ export const MCPWidget: React.FC<{
               <Package2 className="h-4 w-4 text-violet-500" />
               <Sparkles className="h-2.5 w-2.5 text-violet-400 absolute -top-1 -right-1" />
             </div>
-            <span className="text-sm font-medium text-violet-600 dark:text-violet-400">MCP Tool</span>
+            <span className="text-sm font-medium text-violet-600 dark:text-violet-400">MCP 工具</span>
           </div>
           {hasInput && (
             <div className="flex items-center gap-2">
@@ -1329,7 +1331,7 @@ export const MCPWidget: React.FC<{
                 variant="outline" 
                 className="text-xs border-violet-500/30 text-violet-600 dark:text-violet-400"
               >
-                ~{inputTokens} tokens
+                约{inputTokens}个tokens
               </Badge>
               {isLargeInput && (
                 <button
@@ -1366,7 +1368,7 @@ export const MCPWidget: React.FC<{
           </div>
         </div>
         
-        {/* Input Parameters */}
+        {/* 输入参数 */}
         {hasInput && (
           <div className={cn(
             "transition-all duration-200",
@@ -1379,7 +1381,7 @@ export const MCPWidget: React.FC<{
               )}>
                 <div className="px-3 py-2 border-b bg-zinc-900/50 flex items-center gap-2">
                   <Code className="h-3 w-3 text-violet-500" />
-                  <span className="text-xs font-mono text-muted-foreground">Parameters</span>
+                  <span className="text-xs font-mono text-muted-foreground">参数</span>
                 </div>
                 <div className={cn(
                   "overflow-auto",
@@ -1402,13 +1404,13 @@ export const MCPWidget: React.FC<{
                 </div>
               </div>
               
-              {/* Gradient fade for collapsed view */}
+              {/* 折叠视图的渐变淡出效果 */}
               {!isExpanded && isLargeInput && (
                 <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-zinc-950/80 to-transparent pointer-events-none" />
               )}
             </div>
             
-            {/* Expand hint */}
+            {/* 展开提示 */}
             {!isExpanded && isLargeInput && (
               <div className="text-center mt-2">
                 <button
@@ -1416,17 +1418,17 @@ export const MCPWidget: React.FC<{
                   className="text-xs text-violet-500 hover:text-violet-600 transition-colors inline-flex items-center gap-1"
                 >
                   <ChevronDown className="h-3 w-3" />
-                  Show full parameters
+                  显示完整参数
                 </button>
               </div>
             )}
           </div>
         )}
         
-        {/* No input message */}
+        {/* 无输入消息 */}
         {!hasInput && (
           <div className="text-xs text-muted-foreground italic px-2">
-            No parameters required
+            无需参数
           </div>
         )}
       </div>
@@ -1435,7 +1437,7 @@ export const MCPWidget: React.FC<{
 };
 
 /**
- * Widget for user commands (e.g., model, clear)
+ * 用户命令的组件（例如：model、clear）
  */
 export const CommandWidget: React.FC<{ 
   commandName: string;
@@ -1446,7 +1448,7 @@ export const CommandWidget: React.FC<{
     <div className="rounded-lg border bg-zinc-950/50 overflow-hidden">
       <div className="px-4 py-2 border-b bg-zinc-900/50 flex items-center gap-2">
         <Terminal className="h-3.5 w-3.5 text-blue-500" />
-        <span className="text-xs font-mono text-blue-400">Command</span>
+        <span className="text-xs font-mono text-blue-400">命令</span>
       </div>
       <div className="p-3 space-y-1">
         <div className="flex items-center gap-2">
@@ -1465,26 +1467,26 @@ export const CommandWidget: React.FC<{
 };
 
 /**
- * Widget for command output/stdout
+ * 命令输出/标准输出的组件
  */
 export const CommandOutputWidget: React.FC<{ 
   output: string;
   onLinkDetected?: (url: string) => void;
 }> = ({ output, onLinkDetected }) => {
-  // Check for links on mount and when output changes
+  // 在组件挂载和输出变化时检查链接
   React.useEffect(() => {
     if (output && onLinkDetected) {
       const links = detectLinks(output);
       if (links.length > 0) {
-        // Notify about the first detected link
+        // 通知关于第一个检测到的链接
         onLinkDetected(links[0].fullUrl);
       }
     }
   }, [output, onLinkDetected]);
 
-  // Parse ANSI codes for basic styling
+  // 解析ANSI代码以实现基本样式
   const parseAnsiToReact = (text: string) => {
-    // Simple ANSI parsing - handles bold (\u001b[1m) and reset (\u001b[22m)
+    // 简单的ANSI解析 - 处理粗体 (\u001b[1m) 和重置 (\u001b[22m)
     const parts = text.split(/(\u001b\[\d+m)/);
     let isBold = false;
     const elements: React.ReactNode[] = [];
@@ -1497,13 +1499,13 @@ export const CommandOutputWidget: React.FC<{
         isBold = false;
         return;
       } else if (part.match(/\u001b\[\d+m/)) {
-        // Ignore other ANSI codes for now
+        // 暂时忽略其他ANSI代码
         return;
       }
       
       if (!part) return;
       
-      // Make links clickable within this part
+      // 使这部分中的链接可点击
       const linkElements = makeLinksClickable(part, (url) => {
         onLinkDetected?.(url);
       });
@@ -1526,11 +1528,11 @@ export const CommandOutputWidget: React.FC<{
     <div className="rounded-lg border bg-zinc-950/50 overflow-hidden">
       <div className="px-4 py-2 bg-zinc-900/50 flex items-center gap-2">
         <ChevronRight className="h-3 w-3 text-green-500" />
-        <span className="text-xs font-mono text-green-400">Output</span>
+        <span className="text-xs font-mono text-green-400">输出</span>
       </div>
       <div className="p-3">
         <pre className="text-sm font-mono text-zinc-300 whitespace-pre-wrap">
-          {output ? parseAnsiToReact(output) : <span className="text-zinc-500 italic">No output</span>}
+          {output ? parseAnsiToReact(output) : <span className="text-zinc-500 italic">无输出</span>}
         </pre>
       </div>
     </div>
@@ -1538,7 +1540,7 @@ export const CommandOutputWidget: React.FC<{
 };
 
 /**
- * Widget for AI-generated summaries
+ * AI生成摘要的组件
  */
 export const SummaryWidget: React.FC<{ 
   summary: string;
@@ -1553,7 +1555,7 @@ export const SummaryWidget: React.FC<{
           </div>
         </div>
         <div className="flex-1 space-y-1">
-          <div className="text-xs font-medium text-blue-600 dark:text-blue-400">AI Summary</div>
+          <div className="text-xs font-medium text-blue-600 dark:text-blue-400">AI 摘要</div>
           <p className="text-sm text-foreground">{summary}</p>
           {leafUuid && (
             <div className="text-xs text-muted-foreground mt-2">
@@ -1567,7 +1569,7 @@ export const SummaryWidget: React.FC<{
 };
 
 /**
- * Widget for displaying MultiEdit tool usage
+ * 显示MultiEdit工具使用的组件
  */
 export const MultiEditWidget: React.FC<{
   file_path: string;
@@ -1581,7 +1583,7 @@ export const MultiEditWidget: React.FC<{
     <div className="space-y-2">
       <div className="flex items-center gap-2 mb-2">
         <FileEdit className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm font-medium">Using tool: MultiEdit</span>
+        <span className="text-sm font-medium">使用工具：MultiEdit</span>
       </div>
       <div className="ml-6 space-y-2">
         <div className="flex items-center gap-2">
@@ -1595,7 +1597,7 @@ export const MultiEditWidget: React.FC<{
             className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             <ChevronRight className={cn("h-3 w-3 transition-transform", isExpanded && "rotate-90")} />
-            {edits.length} edit{edits.length !== 1 ? 's' : ''}
+            {edits.length} 处编辑
           </button>
           
           {isExpanded && (
@@ -1608,7 +1610,7 @@ export const MultiEditWidget: React.FC<{
                 
                 return (
                   <div key={index} className="space-y-1">
-                    <div className="text-xs font-medium text-muted-foreground">Edit {index + 1}</div>
+                    <div className="text-xs font-medium text-muted-foreground">编辑 {index + 1}</div>
                     <div className="rounded-lg border bg-zinc-950 overflow-hidden text-xs font-mono">
                       <div className="max-h-[300px] overflow-y-auto overflow-x-auto">
                         {diffResult.map((part, partIndex) => {
@@ -1621,7 +1623,7 @@ export const MultiEditWidget: React.FC<{
                           if (!part.added && !part.removed && part.count && part.count > 8) {
                             return (
                               <div key={partIndex} className="px-4 py-1 bg-zinc-900 border-y border-zinc-800 text-center text-zinc-500 text-xs">
-                                ... {part.count} unchanged lines ...
+                                ... {part.count} 行未更改 ...
                               </div>
                             );
                           }
@@ -1671,37 +1673,37 @@ export const MultiEditWidget: React.FC<{
 };
 
 /**
- * Widget for displaying MultiEdit tool results with diffs
+ * 显示带有差异的MultiEdit工具结果的组件
  */
 export const MultiEditResultWidget: React.FC<{ 
   content: string;
   edits?: Array<{ old_string: string; new_string: string }>;
 }> = ({ content, edits }) => {
-  // If we have the edits array, show a nice diff view
+  // 如果我们有编辑数组，显示一个漂亮的差异视图
   if (edits && edits.length > 0) {
     return (
       <div className="space-y-3">
         <div className="flex items-center gap-2 px-3 py-2 bg-green-500/10 rounded-t-md border-b border-green-500/20">
           <GitBranch className="h-4 w-4 text-green-500" />
           <span className="text-sm font-medium text-green-600 dark:text-green-400">
-            {edits.length} Changes Applied
+            已应用 {edits.length} 处更改
           </span>
         </div>
         
         <div className="space-y-4">
           {edits.map((edit, index) => {
-            // Split the strings into lines for diff display
+            // 将字符串分割成行以显示差异
             const oldLines = edit.old_string.split('\n');
             const newLines = edit.new_string.split('\n');
             
             return (
               <div key={index} className="border border-border/50 rounded-md overflow-hidden">
                 <div className="px-3 py-1 bg-muted/50 border-b border-border/50">
-                  <span className="text-xs font-medium text-muted-foreground">Change {index + 1}</span>
+                  <span className="text-xs font-medium text-muted-foreground">更改 {index + 1}</span>
                 </div>
                 
                 <div className="font-mono text-xs">
-                  {/* Show removed lines */}
+                  {/* 显示删除的行 */}
                   {oldLines.map((line, lineIndex) => (
                     <div
                       key={`old-${lineIndex}`}
@@ -1716,7 +1718,7 @@ export const MultiEditResultWidget: React.FC<{
                     </div>
                   ))}
                   
-                  {/* Show added lines */}
+                  {/* 显示添加的行 */}
                   {newLines.map((line, lineIndex) => (
                     <div
                       key={`new-${lineIndex}`}
@@ -1739,7 +1741,7 @@ export const MultiEditResultWidget: React.FC<{
     );
   }
   
-  // Fallback to simple content display
+  // 回退到简单的内容显示
   return (
     <div className="p-3 bg-muted/50 rounded-md border">
       <pre className="text-xs font-mono whitespace-pre-wrap">{content}</pre>
@@ -1748,10 +1750,10 @@ export const MultiEditResultWidget: React.FC<{
 };
 
 /**
- * Widget for displaying system reminders (instead of raw XML)
+ * 显示系统提醒的组件（而不是原始XML）
  */
 export const SystemReminderWidget: React.FC<{ message: string }> = ({ message }) => {
-  // Extract icon based on message content
+  // 根据消息内容提取图标
   let icon = <Info className="h-4 w-4" />;
   let colorClass = "border-blue-500/20 bg-blue-500/5 text-blue-600";
   
@@ -1772,8 +1774,8 @@ export const SystemReminderWidget: React.FC<{ message: string }> = ({ message })
 };
 
 /**
- * Widget for displaying system initialization information in a visually appealing way
- * Separates regular tools from MCP tools and provides icons for each tool type
+ * 以视觉吸引力的方式显示系统初始化信息的组件
+ * 将常规工具与MCP工具分开，并为每种工具类型提供图标
  */
 export const SystemInitializedWidget: React.FC<{
   sessionId?: string;
@@ -1783,11 +1785,11 @@ export const SystemInitializedWidget: React.FC<{
 }> = ({ sessionId, model, cwd, tools = [] }) => {
   const [mcpExpanded, setMcpExpanded] = useState(false);
   
-  // Separate regular tools from MCP tools
+  // 将常规工具与MCP工具分开
   const regularTools = tools.filter(tool => !tool.startsWith('mcp__'));
   const mcpTools = tools.filter(tool => tool.startsWith('mcp__'));
   
-  // Tool icon mapping for regular tools
+  // 常规工具的图标映射
   const toolIcons: Record<string, LucideIcon> = {
     'task': CheckSquare,
     'bash': Terminal,
@@ -1807,20 +1809,20 @@ export const SystemInitializedWidget: React.FC<{
     'websearch': Globe2,
   };
   
-  // Get icon for a tool, fallback to Wrench
+  // 获取工具的图标，默认为扳手图标
   const getToolIcon = (toolName: string) => {
     const normalizedName = toolName.toLowerCase();
     return toolIcons[normalizedName] || Wrench;
   };
   
-  // Format MCP tool name (remove mcp__ prefix and format underscores)
+  // 格式化MCP工具名称（移除mcp__前缀并格式化下划线）
   const formatMcpToolName = (toolName: string) => {
     // Remove mcp__ prefix
     const withoutPrefix = toolName.replace(/^mcp__/, '');
-    // Split by double underscores first (provider separator)
+    // 首先按双下划线分割（提供者分隔符）
     const parts = withoutPrefix.split('__');
     if (parts.length >= 2) {
-      // Format provider name and method name separately
+      // 分别格式化提供者名称和方法名称
       const provider = parts[0].replace(/_/g, ' ').replace(/-/g, ' ')
         .split(' ')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -1831,7 +1833,7 @@ export const SystemInitializedWidget: React.FC<{
         .join(' ');
       return { provider, method };
     }
-    // Fallback formatting
+    // 后备格式化
     return {
       provider: 'MCP',
       method: withoutPrefix.replace(/_/g, ' ')
@@ -1841,7 +1843,7 @@ export const SystemInitializedWidget: React.FC<{
     };
   };
   
-  // Group MCP tools by provider
+  // 按提供者对MCP工具进行分组
   const mcpToolsByProvider = mcpTools.reduce((acc, tool) => {
     const { provider } = formatMcpToolName(tool);
     if (!acc[provider]) {
@@ -1857,14 +1859,14 @@ export const SystemInitializedWidget: React.FC<{
         <div className="flex items-start gap-3">
           <Settings className="h-5 w-5 text-blue-500 mt-0.5" />
           <div className="flex-1 space-y-4">
-            <h4 className="font-semibold text-sm">System Initialized</h4>
+            <h4 className="font-semibold text-sm">系统已初始化</h4>
             
-            {/* Session Info */}
+            {/* 会话信息 */}
             <div className="space-y-2">
               {sessionId && (
                 <div className="flex items-center gap-2 text-xs">
                   <Fingerprint className="h-3.5 w-3.5 text-muted-foreground" />
-                  <span className="text-muted-foreground">Session ID:</span>
+                  <span className="text-muted-foreground">会话ID：</span>
                   <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">
                     {sessionId}
                   </code>
@@ -1874,7 +1876,7 @@ export const SystemInitializedWidget: React.FC<{
               {model && (
                 <div className="flex items-center gap-2 text-xs">
                   <Cpu className="h-3.5 w-3.5 text-muted-foreground" />
-                  <span className="text-muted-foreground">Model:</span>
+                  <span className="text-muted-foreground">模型：</span>
                   <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">
                     {model}
                   </code>
@@ -1884,7 +1886,7 @@ export const SystemInitializedWidget: React.FC<{
               {cwd && (
                 <div className="flex items-center gap-2 text-xs">
                   <FolderOpen className="h-3.5 w-3.5 text-muted-foreground" />
-                  <span className="text-muted-foreground">Working Directory:</span>
+                  <span className="text-muted-foreground">工作目录：</span>
                   <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded break-all">
                     {cwd}
                   </code>
@@ -1892,13 +1894,13 @@ export const SystemInitializedWidget: React.FC<{
               )}
             </div>
             
-            {/* Regular Tools */}
+            {/* 常规工具 */}
             {regularTools.length > 0 && (
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Wrench className="h-3.5 w-3.5 text-muted-foreground" />
                   <span className="text-xs font-medium text-muted-foreground">
-                    Available Tools ({regularTools.length})
+                    可用工具 ({regularTools.length})
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
@@ -1919,7 +1921,7 @@ export const SystemInitializedWidget: React.FC<{
               </div>
             )}
             
-            {/* MCP Tools */}
+            {/* MCP工具 */}
             {mcpTools.length > 0 && (
               <div className="space-y-2">
                 <button
@@ -1927,7 +1929,7 @@ export const SystemInitializedWidget: React.FC<{
                   className="flex items-center gap-2 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <Package className="h-3.5 w-3.5" />
-                  <span>MCP Services ({mcpTools.length})</span>
+                  <span>MCP服务 ({mcpTools.length})</span>
                   <ChevronDown className={cn(
                     "h-3 w-3 transition-transform",
                     mcpExpanded && "rotate-180"
@@ -1964,10 +1966,10 @@ export const SystemInitializedWidget: React.FC<{
               </div>
             )}
             
-            {/* Show message if no tools */}
+            {/* 如果没有工具则显示消息 */}
             {tools.length === 0 && (
               <div className="text-xs text-muted-foreground italic">
-                No tools available
+                没有可用工具
               </div>
             )}
           </div>
@@ -1978,7 +1980,7 @@ export const SystemInitializedWidget: React.FC<{
 };
 
 /**
- * Widget for Task tool - displays sub-agent task information
+ * Task工具的组件 - 显示子代理任务信息
  */
 export const TaskWidget: React.FC<{ 
   description?: string; 
@@ -1994,7 +1996,7 @@ export const TaskWidget: React.FC<{
           <Bot className="h-4 w-4 text-purple-500" />
           <Sparkles className="h-2.5 w-2.5 text-purple-400 absolute -top-1 -right-1" />
         </div>
-        <span className="text-sm font-medium">Spawning Sub-Agent Task</span>
+        <span className="text-sm font-medium">正在创建子代理任务</span>
       </div>
       
       <div className="ml-6 space-y-3">
@@ -2002,7 +2004,7 @@ export const TaskWidget: React.FC<{
           <div className="rounded-lg border border-purple-500/20 bg-purple-500/5 p-3">
             <div className="flex items-center gap-2 mb-1">
               <Zap className="h-3.5 w-3.5 text-purple-500" />
-              <span className="text-xs font-medium text-purple-600 dark:text-purple-400">Task Description</span>
+              <span className="text-xs font-medium text-purple-600 dark:text-purple-400">任务描述</span>
             </div>
             <p className="text-sm text-foreground ml-5">{description}</p>
           </div>
@@ -2015,7 +2017,7 @@ export const TaskWidget: React.FC<{
               className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               <ChevronRight className={cn("h-3 w-3 transition-transform", isExpanded && "rotate-90")} />
-              <span>Task Instructions</span>
+              <span>任务指令</span>
             </button>
             
             {isExpanded && (
@@ -2033,7 +2035,7 @@ export const TaskWidget: React.FC<{
 };
 
 /**
- * Widget for WebSearch tool - displays web search query and results
+ * WebSearch工具的组件 - 显示网络搜索查询和结果
  */
 export const WebSearchWidget: React.FC<{ 
   query: string; 
@@ -2041,41 +2043,41 @@ export const WebSearchWidget: React.FC<{
 }> = ({ query, result }) => {
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
   
-  // Parse the result to extract all links sections and build a structured representation
+  // 解析结果以提取所有链接部分并构建结构化表示
   const parseSearchResult = (resultContent: string) => {
     const sections: Array<{
       type: 'text' | 'links';
       content: string | Array<{ title: string; url: string }>;
     }> = [];
     
-    // Split by "Links: [" to find all link sections
+    // 通过"Links: ["分割以查找所有链接部分
     const parts = resultContent.split(/Links:\s*\[/);
     
-    // First part is always text (or empty)
+    // 第一部分始终是文本（或为空）
     if (parts[0]) {
       sections.push({ type: 'text', content: parts[0].trim() });
     }
     
-    // Process each links section
+    // 处理每个链接部分
     parts.slice(1).forEach(part => {
       try {
-        // Find the closing bracket
+        // 查找闭合括号
         const closingIndex = part.indexOf(']');
         if (closingIndex === -1) return;
         
         const linksJson = '[' + part.substring(0, closingIndex + 1);
         const remainingText = part.substring(closingIndex + 1).trim();
         
-        // Parse the JSON array
+        // 解析JSON数组
         const links = JSON.parse(linksJson);
         sections.push({ type: 'links', content: links });
         
-        // Add any remaining text
+        // 添加任何剩余文本
         if (remainingText) {
           sections.push({ type: 'text', content: remainingText });
         }
       } catch (e) {
-        // If parsing fails, treat it as text
+        // 如果解析失败，将其视为文本
         sections.push({ type: 'text', content: 'Links: [' + part });
       }
     });
@@ -2093,7 +2095,7 @@ export const WebSearchWidget: React.FC<{
     setExpandedSections(newExpanded);
   };
   
-  // Extract result content if available
+  // 提取结果内容（如果可用）
   let searchResults: {
     sections: Array<{
       type: 'text' | 'links';
@@ -2118,8 +2120,10 @@ export const WebSearchWidget: React.FC<{
       }
     }
     
-    searchResults.noResults = resultContent.toLowerCase().includes('no links found') || 
-                               resultContent.toLowerCase().includes('no results');
+    searchResults.noResults = resultContent.toLowerCase().includes('no links found') ||
+                               resultContent.toLowerCase().includes('no results') ||
+                               resultContent.toLowerCase().includes('未找到链接') ||
+                               resultContent.toLowerCase().includes('没有结果');
     searchResults.sections = parseSearchResult(resultContent);
   }
   
@@ -2127,20 +2131,20 @@ export const WebSearchWidget: React.FC<{
     try {
       await open(url);
     } catch (error) {
-      console.error('Failed to open URL:', error);
+      console.error('打开URL失败:', error);
     }
   };
   
   return (
     <div className="flex flex-col gap-2">
-      {/* Subtle Search Query Header */}
+      {/* 搜索查询标题 */}
       <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-500/5 border border-blue-500/10">
         <Globe className="h-4 w-4 text-blue-500/70" />
-        <span className="text-xs font-medium uppercase tracking-wider text-blue-600/70 dark:text-blue-400/70">Web Search</span>
+        <span className="text-xs font-medium uppercase tracking-wider text-blue-600/70 dark:text-blue-400/70">网络搜索</span>
         <span className="text-sm text-muted-foreground/80 flex-1 truncate">{query}</span>
       </div>
       
-      {/* Results */}
+      {/* 结果 */}
       {result && (
         <div className="rounded-lg border bg-background/50 backdrop-blur-sm overflow-hidden">
           {!searchResults.sections.length ? (
@@ -2150,13 +2154,13 @@ export const WebSearchWidget: React.FC<{
                 <div className="h-1 w-1 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
                 <div className="h-1 w-1 bg-blue-500 rounded-full animate-bounce"></div>
               </div>
-              <span className="text-sm">Searching...</span>
+              <span className="text-sm">搜索中...</span>
             </div>
           ) : searchResults.noResults ? (
             <div className="px-3 py-2">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <AlertCircle className="h-4 w-4" />
-                <span className="text-sm">No results found</span>
+                <span className="text-sm">未找到结果</span>
               </div>
             </div>
           ) : (
@@ -2174,7 +2178,7 @@ export const WebSearchWidget: React.FC<{
                   
                   return (
                     <div key={idx} className="space-y-1.5">
-                      {/* Toggle Button */}
+                      {/* 切换按钮 */}
                       <button
                         onClick={() => toggleSection(idx)}
                         className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -2184,12 +2188,12 @@ export const WebSearchWidget: React.FC<{
                         ) : (
                           <ChevronRight className="h-3 w-3" />
                         )}
-                        <span>{links.length} result{links.length !== 1 ? 's' : ''}</span>
+                        <span>{links.length} 个结果</span>
                       </button>
                       
-                      {/* Links Display */}
+                      {/* 链接显示 */}
                       {isExpanded ? (
-                        /* Expanded Card View */
+                        /* 展开的卡片视图 */
                         <div className="grid gap-1.5 ml-4">
                           {links.map((link, linkIdx) => (
                             <button
@@ -2212,7 +2216,7 @@ export const WebSearchWidget: React.FC<{
                           ))}
                         </div>
                       ) : (
-                        /* Collapsed Pills View */
+                        /* 折叠的胶囊视图 */
                         <div className="flex flex-wrap gap-1.5 ml-4">
                           {links.map((link, linkIdx) => (
                             <button
@@ -2245,8 +2249,8 @@ export const WebSearchWidget: React.FC<{
 };
 
 /**
- * Widget for displaying AI thinking/reasoning content
- * Collapsible and closed by default
+ * 用于显示AI思考/推理内容的组件
+ * 可折叠且默认关闭
  */
 export const ThinkingWidget: React.FC<{ 
   thinking: string;
@@ -2254,7 +2258,7 @@ export const ThinkingWidget: React.FC<{
 }> = ({ thinking }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
-  // Strip whitespace from thinking content
+  // 去除思考内容的空白
   const trimmedThinking = thinking.trim();
   
   return (
@@ -2269,7 +2273,7 @@ export const ThinkingWidget: React.FC<{
             <Sparkles className="h-2.5 w-2.5 text-gray-400 absolute -top-1 -right-1 animate-pulse" />
           </div>
           <span className="text-sm font-medium text-gray-600 dark:text-gray-400 italic">
-            Thinking...
+            思考中...
           </span>
         </div>
         <ChevronRight className={cn(

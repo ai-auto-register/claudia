@@ -9,18 +9,18 @@ import { cn } from "@/lib/utils";
 
 interface MarkdownEditorProps {
   /**
-   * Callback to go back to the main view
+   * 返回主视图的回调
    */
   onBack: () => void;
   /**
-   * Optional className for styling
+   * 可选的样式类名
    */
   className?: string;
 }
 
 /**
- * MarkdownEditor component for editing the CLAUDE.md system prompt
- * 
+ * MarkdownEditor 组件 - 用于编辑 CLAUDE.md 系统提示
+ *
  * @example
  * <MarkdownEditor onBack={() => setView('main')} />
  */
@@ -50,8 +50,8 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
       setContent(prompt);
       setOriginalContent(prompt);
     } catch (err) {
-      console.error("Failed to load system prompt:", err);
-      setError("Failed to load CLAUDE.md file");
+      console.error("加载系统提示失败:", err);
+      setError("加载 CLAUDE.md 文件失败");
     } finally {
       setLoading(false);
     }
@@ -64,11 +64,11 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
       setToast(null);
       await api.saveSystemPrompt(content);
       setOriginalContent(content);
-      setToast({ message: "CLAUDE.md saved successfully", type: "success" });
+      setToast({ message: "CLAUDE.md 保存成功", type: "success" });
     } catch (err) {
-      console.error("Failed to save system prompt:", err);
-      setError("Failed to save CLAUDE.md file");
-      setToast({ message: "Failed to save CLAUDE.md", type: "error" });
+      console.error("保存系统提示失败:", err);
+      setError("保存 CLAUDE.md 文件失败");
+      setToast({ message: "保存 CLAUDE.md 失败", type: "error" });
     } finally {
       setSaving(false);
     }
@@ -77,7 +77,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
   const handleBack = () => {
     if (hasChanges) {
       const confirmLeave = window.confirm(
-        "You have unsaved changes. Are you sure you want to leave?"
+        "您有未保存的更改。确定要离开吗？"
       );
       if (!confirmLeave) return;
     }
@@ -106,7 +106,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
             <div>
               <h2 className="text-lg font-semibold">CLAUDE.md</h2>
               <p className="text-xs text-muted-foreground">
-                Edit your Claude Code system prompt
+                编辑您的 Claude Code 系统提示
               </p>
             </div>
           </div>
@@ -121,7 +121,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
             ) : (
               <Save className="mr-2 h-4 w-4" />
             )}
-            {saving ? "Saving..." : "Save"}
+            {saving ? "保存中..." : "保存"}
           </Button>
         </motion.div>
         

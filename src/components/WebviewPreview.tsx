@@ -228,7 +228,7 @@ const WebviewPreviewComponent: React.FC<WebviewPreviewProps> = ({
         <div className="flex items-center justify-between px-3 py-2 border-b">
           <div className="flex items-center gap-2">
             <Globe className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-medium">Preview</span>
+            <span className="text-sm font-medium">预览</span>
             {isLoading && (
               <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
             )}
@@ -253,7 +253,7 @@ const WebviewPreviewComponent: React.FC<WebviewPreviewProps> = ({
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    {isMaximized ? "Exit full screen (ESC)" : "Enter full screen"}
+                    {isMaximized ? "退出全屏 (ESC)" : "进入全屏"}
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -344,7 +344,7 @@ const WebviewPreviewComponent: React.FC<WebviewPreviewProps> = ({
             ) : (
               <Camera className="h-4 w-4" />
             )}
-            Send to Claude
+            发送到 Claude
           </Button>
         </div>
       </div>

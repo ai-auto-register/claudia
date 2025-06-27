@@ -91,7 +91,7 @@ export const ClaudeVersionSelector: React.FC<ClaudeVersionSelectorProps> = ({
       }
     } catch (err) {
       console.error("Failed to load Claude installations:", err);
-      setError(err instanceof Error ? err.message : "Failed to load Claude installations");
+      setError(err instanceof Error ? err.message : "加载 Claude 安装失败");
     } finally {
       setLoading(false);
     }
@@ -108,13 +108,13 @@ export const ClaudeVersionSelector: React.FC<ClaudeVersionSelectorProps> = ({
   };
 
   const getSourceLabel = (source: string) => {
-    if (source === "which") return "System PATH";
+    if (source === "which") return "系统路径";
     if (source === "homebrew") return "Homebrew";
-    if (source === "system") return "System";
+    if (source === "system") return "系统";
     if (source.startsWith("nvm")) return source.replace("nvm ", "NVM ");
-    if (source === "local-bin") return "Local bin";
-    if (source === "claude-local") return "Claude local";
-    if (source === "npm-global") return "NPM global";
+    if (source === "local-bin") return "本地 bin";
+    if (source === "claude-local") return "Claude 本地";
+    if (source === "npm-global") return "NPM 全局";
     if (source === "yarn" || source === "yarn-global") return "Yarn";
     if (source === "bun") return "Bun";
     return source;
@@ -140,7 +140,7 @@ export const ClaudeVersionSelector: React.FC<ClaudeVersionSelectorProps> = ({
     return (
       <Card className={cn("p-4", className)}>
         <div className="text-sm text-muted-foreground">
-          No Claude Code installations found on your system.
+          在您的系统上未找到 Claude Code 安装。
         </div>
       </Card>
     );
@@ -150,7 +150,7 @@ export const ClaudeVersionSelector: React.FC<ClaudeVersionSelectorProps> = ({
     <div className={cn("space-y-4", className)}>
       <div>
         <Label className="text-sm font-medium mb-3 block">
-          Select Claude Code Installation
+          选择 Claude Code 安装
         </Label>
         <RadioGroup
           value={selectedInstallation?.path}
@@ -193,7 +193,7 @@ export const ClaudeVersionSelector: React.FC<ClaudeVersionSelectorProps> = ({
                       {selectedPath === installation.path && (
                         <Badge variant="default" className="text-xs">
                           <Check className="w-3 h-3 mr-1" />
-                          Current
+                          当前
                         </Badge>
                       )}
                     </div>
@@ -218,10 +218,10 @@ export const ClaudeVersionSelector: React.FC<ClaudeVersionSelectorProps> = ({
             {isSaving ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Saving...
+                保存中...
               </>
             ) : (
-              "Save Selection"
+              "保存选择"
             )}
           </Button>
         </div>

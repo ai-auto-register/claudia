@@ -65,7 +65,7 @@ fn main() {
         .plugin(tauri_plugin_dialog::init())
         .setup(|app| {
             // Initialize agents database
-            let conn = init_database(&app.handle()).expect("Failed to initialize agents database");
+            let conn = init_database(&app.handle()).expect("无法初始化代理数据库");
             app.manage(AgentDb(Mutex::new(conn)));
 
             // Initialize checkpoint state
@@ -73,12 +73,12 @@ fn main() {
 
             // Set the Claude directory path
             if let Ok(claude_dir) = dirs::home_dir()
-                .ok_or_else(|| "Could not find home directory")
+                .ok_or_else(|| "无法找到主目录")
                 .and_then(|home| {
                     let claude_path = home.join(".claude");
                     claude_path
                         .canonicalize()
-                        .map_err(|_| "Could not find ~/.claude directory")
+                        .map_err(|_| "无法找到 ~/.claude 目录")
                 })
             {
                 let state_clone = checkpoint_state.clone();

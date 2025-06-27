@@ -55,7 +55,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       </Button>
       
       <span className="text-sm text-muted-foreground">
-        Page {currentPage} of {totalPages}
+        第 {currentPage} 页，共 {totalPages} 页
       </span>
       
       <Button

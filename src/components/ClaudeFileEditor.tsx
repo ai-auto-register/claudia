@@ -9,26 +9,26 @@ import { cn } from "@/lib/utils";
 
 interface ClaudeFileEditorProps {
   /**
-   * The CLAUDE.md file to edit
+   * 要编辑的 CLAUDE.md 文件
    */
   file: ClaudeMdFile;
   /**
-   * Callback to go back to the previous view
+   * 返回上一视图的回调
    */
   onBack: () => void;
   /**
-   * Optional className for styling
+   * 可选的样式类名
    */
   className?: string;
 }
 
 /**
- * ClaudeFileEditor component for editing project-specific CLAUDE.md files
- * 
+ * ClaudeFileEditor 组件 - 用于编辑项目特定的 CLAUDE.md 文件
+ *
  * @example
- * <ClaudeFileEditor 
- *   file={claudeMdFile} 
- *   onBack={() => setEditingFile(null)} 
+ * <ClaudeFileEditor
+ *   file={claudeMdFile}
+ *   onBack={() => setEditingFile(null)}
  * />
  */
 export const ClaudeFileEditor: React.FC<ClaudeFileEditorProps> = ({
@@ -58,8 +58,8 @@ export const ClaudeFileEditor: React.FC<ClaudeFileEditorProps> = ({
       setContent(fileContent);
       setOriginalContent(fileContent);
     } catch (err) {
-      console.error("Failed to load file:", err);
-      setError("Failed to load CLAUDE.md file");
+      console.error("加载文件失败:", err);
+      setError("加载 CLAUDE.md 文件失败");
     } finally {
       setLoading(false);
     }
@@ -72,11 +72,11 @@ export const ClaudeFileEditor: React.FC<ClaudeFileEditorProps> = ({
       setToast(null);
       await api.saveClaudeMdFile(file.absolute_path, content);
       setOriginalContent(content);
-      setToast({ message: "File saved successfully", type: "success" });
+      setToast({ message: "文件保存成功", type: "success" });
     } catch (err) {
-      console.error("Failed to save file:", err);
-      setError("Failed to save CLAUDE.md file");
-      setToast({ message: "Failed to save file", type: "error" });
+      console.error("保存文件失败:", err);
+      setError("保存 CLAUDE.md 文件失败");
+      setToast({ message: "保存文件失败", type: "error" });
     } finally {
       setSaving(false);
     }
@@ -85,7 +85,7 @@ export const ClaudeFileEditor: React.FC<ClaudeFileEditorProps> = ({
   const handleBack = () => {
     if (hasChanges) {
       const confirmLeave = window.confirm(
-        "You have unsaved changes. Are you sure you want to leave?"
+        "您有未保存的更改。确定要离开吗？"
       );
       if (!confirmLeave) return;
     }
@@ -114,7 +114,7 @@ export const ClaudeFileEditor: React.FC<ClaudeFileEditorProps> = ({
             <div className="min-w-0 flex-1">
               <h2 className="text-lg font-semibold truncate">{file.relative_path}</h2>
               <p className="text-xs text-muted-foreground">
-                Edit project-specific Claude Code system prompt
+                编辑项目特定的 Claude Code 系统提示
               </p>
             </div>
           </div>
@@ -129,7 +129,7 @@ export const ClaudeFileEditor: React.FC<ClaudeFileEditorProps> = ({
             ) : (
               <Save className="mr-2 h-4 w-4" />
             )}
-            {saving ? "Saving..." : "Save"}
+            {saving ? "保存中..." : "保存"}
           </Button>
         </motion.div>
         

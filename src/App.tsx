@@ -77,8 +77,8 @@ function App() {
       const projectList = await api.listProjects();
       setProjects(projectList);
     } catch (err) {
-      console.error("Failed to load projects:", err);
-      setError("Failed to load projects. Please ensure ~/.claude directory exists.");
+      console.error("加载项目失败:", err);
+      setError("加载项目失败. 请确保 ~/.claude 目录存在。");
     } finally {
       setLoading(false);
     }
@@ -149,7 +149,7 @@ function App() {
               >
                 <h1 className="text-4xl font-bold tracking-tight">
                   <span className="rotating-symbol"></span>
-                  Welcome to Claudia
+                  欢迎使用 Claudia
                 </h1>
               </motion.div>
 
@@ -167,7 +167,7 @@ function App() {
                   >
                     <div className="h-full flex flex-col items-center justify-center p-8">
                       <Bot className="h-16 w-16 mb-4 text-primary" />
-                      <h2 className="text-xl font-semibold">CC Agents</h2>
+                      <h2 className="text-xl font-semibold">CC 智能代理</h2>
                     </div>
                   </Card>
                 </motion.div>
@@ -184,7 +184,7 @@ function App() {
                   >
                     <div className="h-full flex flex-col items-center justify-center p-8">
                       <FolderCode className="h-16 w-16 mb-4 text-primary" />
-                      <h2 className="text-xl font-semibold">CC Projects</h2>
+                      <h2 className="text-xl font-semibold">CC 项目</h2>
                     </div>
                   </Card>
                 </motion.div>
@@ -232,12 +232,12 @@ function App() {
                   onClick={() => setView("welcome")}
                   className="mb-4"
                 >
-                  ← Back to Home
+                  ← 返回首页
                 </Button>
                 <div className="text-center">
-                  <h1 className="text-3xl font-bold tracking-tight">CC Projects</h1>
+                  <h1 className="text-3xl font-bold tracking-tight">CC 项目</h1>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Browse your Claude Code sessions
+                    浏览您的 Claude Code 会话
                   </p>
                 </div>
               </motion.div>
@@ -299,7 +299,7 @@ function App() {
                           className="w-full"
                         >
                           <Plus className="mr-2 h-4 w-4" />
-                          New Claude Code session
+                          新建 Claude Code 会话
                         </Button>
                       </motion.div>
 
@@ -312,7 +312,7 @@ function App() {
                       ) : (
                         <div className="py-8 text-center">
                           <p className="text-sm text-muted-foreground">
-                            No projects found in ~/.claude/projects
+                            在 ~/.claude/projects 中未找到项目
                           </p>
                         </div>
                       )}
@@ -383,7 +383,7 @@ function App() {
           open={showClaudeBinaryDialog}
           onOpenChange={setShowClaudeBinaryDialog}
           onSuccess={() => {
-            setToast({ message: "Claude binary path saved successfully", type: "success" });
+            setToast({ message: "Claude 二进制路径保存成功", type: "success" });
             // Trigger a refresh of the Claude version check
             window.location.reload();
           }}

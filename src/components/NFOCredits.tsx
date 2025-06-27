@@ -15,8 +15,8 @@ interface NFOCreditsProps {
 }
 
 /**
- * NFO Credits component - Displays a keygen/crack style credits window
- * with auto-scrolling text, retro fonts, and background music
+ * NFO Credits 组件 - 显示一个 keygen/crack 风格的信用窗口
+ * 带有自动滚动文本、复古字体和背景音乐
  * 
  * @example
  * <NFOCredits onClose={() => setShowNFO(false)} />
@@ -85,25 +85,25 @@ export const NFOCredits: React.FC<NFOCreditsProps> = ({ onClose }) => {
   // Credits content
   const creditsContent = [
     { type: "header", text: "CLAUDIA v0.1.0" },
-    { type: "subheader", text: "[ A STRATEGIC PROJECT BY ASTERISK ]" },
+    { type: "subheader", text: "[ ASTERISK 的战略项目 ]" },
     { type: "spacer" },
-    { type: "section", title: "━━━ CREDITS ━━━" },
-    { type: "credit", role: "POWERED BY", name: "Anthropic Claude 4" },
-    { type: "credit", role: "CLAUDE CODE", name: "The Ultimate Coding Assistant" },
-    { type: "credit", role: "MCP PROTOCOL", name: "Model Context Protocol" },
+    { type: "section", title: "━━━ 鸣谢 ━━━" },
+    { type: "credit", role: "技术支持", name: "Anthropic Claude 4" },
+    { type: "credit", role: "CLAUDIA CODE", name: "终极编码助手" },
+    { type: "credit", role: "MCP 协议", name: "模型上下文协议" },
     { type: "spacer" },
-    { type: "section", title: "━━━ DEPENDENCIES ━━━" },
-    { type: "credit", role: "RUNTIME", name: "Tauri Framework" },
-    { type: "credit", role: "UI FRAMEWORK", name: "React + TypeScript" },
-    { type: "credit", role: "STYLING", name: "Tailwind CSS + shadcn/ui" },
-    { type: "credit", role: "ANIMATIONS", name: "Framer Motion" },
-    { type: "credit", role: "BUILD TOOL", name: "Vite" },
-    { type: "credit", role: "PACKAGE MANAGER", name: "Bun" },
+    { type: "section", title: "━━━ 依赖 ━━━" },
+    { type: "credit", role: "运行时", name: "Tauri 框架" },
+    { type: "credit", role: "UI 框架", name: "React + TypeScript" },
+    { type: "credit", role: "样式", name: "Tailwind CSS + shadcn/ui" },
+    { type: "credit", role: "动画", name: "Framer Motion" },
+    { type: "credit", role: "构建工具", name: "Vite" },
+    { type: "credit", role: "包管理器", name: "Bun" },
     { type: "spacer" },
-    { type: "section", title: "━━━ SPECIAL THANKS ━━━" },
-    { type: "text", content: "To the open source community" },
-    { type: "text", content: "To all the beta testers" },
-    { type: "text", content: "To everyone who believed in this project" },
+    { type: "section", title: "━━━ 特别感谢 ━━━" },
+    { type: "text", content: "致开源社区" },
+    { type: "text", content: "致所有 Beta 测试人员" },
+    { type: "text", content: "致所有相信这个项目的人" },
     { type: "spacer" },
     { type: "ascii", content: `
      ▄▄▄· .▄▄ · ▄▄▄▄▄▄▄▄ .▄▄▄  ▪  .▄▄ · ▄ •▄ 
@@ -113,8 +113,8 @@ export const NFOCredits: React.FC<NFOCreditsProps> = ({ onClose }) => {
      ▀  ▀  ▀▀▀▀  ▀▀▀  ▀▀▀ .▀  ▀▀▀▀ ▀▀▀▀ ·▀  ▀
     ` },
     { type: "spacer" },
-    { type: "text", content: "Remember: Sharing is caring!" },
-    { type: "text", content: "Support the developers!" },
+    { type: "text", content: "记住：分享就是关怀！" },
+    { type: "text", content: "支持开发者！" },
     { type: "spacer" },
     { type: "spacer" },
     { type: "spacer" },
@@ -162,7 +162,7 @@ export const NFOCredits: React.FC<NFOCreditsProps> = ({ onClose }) => {
                   title="File a bug"
                 >
                   <Github className="h-3 w-3" />
-                  <span className="text-xs">File a bug</span>
+                  <span className="text-xs">提交 Bug</span>
                 </Button>
                 <Button
                   variant="ghost"

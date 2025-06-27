@@ -145,7 +145,7 @@ export const Settings: React.FC<SettingsProps> = ({
       }
     } catch (err) {
       console.error("Failed to load settings:", err);
-      setError("Failed to load settings. Please ensure ~/.claude directory exists.");
+      setError("加载设置失败。请确保 ~/.claude 目录存在。");
       setSettings({});
     } finally {
       setLoading(false);
@@ -187,11 +187,11 @@ export const Settings: React.FC<SettingsProps> = ({
         setBinaryPathChanged(false);
       }
 
-      setToast({ message: "Settings saved successfully!", type: "success" });
+      setToast({ message: "设置保存成功！", type: "success" });
     } catch (err) {
       console.error("Failed to save settings:", err);
-      setError("Failed to save settings.");
-      setToast({ message: "Failed to save settings", type: "error" });
+      setError("保存设置失败。");
+      setToast({ message: "保存设置失败", type: "error" });
     } finally {
       setSaving(false);
     }
@@ -302,9 +302,9 @@ export const Settings: React.FC<SettingsProps> = ({
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h2 className="text-lg font-semibold">Settings</h2>
+          <h2 className="text-lg font-semibold">设置</h2>
           <p className="text-xs text-muted-foreground">
-              Configure Claude Code preferences
+              配置 Claude Code 首选项
           </p>
           </div>
         </div>
@@ -318,12 +318,12 @@ export const Settings: React.FC<SettingsProps> = ({
           {saving ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              Saving...
+              保存中...
             </>
           ) : (
             <>
               <Save className="h-4 w-4" />
-              Save Settings
+              保存设置
             </>
           )}
         </Button>
@@ -355,19 +355,19 @@ export const Settings: React.FC<SettingsProps> = ({
             <TabsList className="mb-6">
               <TabsTrigger value="general" className="gap-2">
                 <Settings2 className="h-4 w-4 text-slate-500" />
-                General
+                常规
               </TabsTrigger>
               <TabsTrigger value="permissions" className="gap-2">
                 <Shield className="h-4 w-4 text-amber-500" />
-                Permissions
+                权限
               </TabsTrigger>
               <TabsTrigger value="environment" className="gap-2">
                 <Terminal className="h-4 w-4 text-blue-500" />
-                Environment
+                环境变量
               </TabsTrigger>
               <TabsTrigger value="advanced" className="gap-2">
                 <Code className="h-4 w-4 text-purple-500" />
-                Advanced
+                高级
               </TabsTrigger>
             </TabsList>
             
@@ -375,15 +375,15 @@ export const Settings: React.FC<SettingsProps> = ({
             <TabsContent value="general" className="space-y-6">
               <Card className="p-6 space-y-6">
                 <div>
-                  <h3 className="text-base font-semibold mb-4">General Settings</h3>
+                  <h3 className="text-base font-semibold mb-4">常规设置</h3>
                   
                   <div className="space-y-4">
                     {/* Include Co-authored By */}
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5 flex-1">
-                        <Label htmlFor="coauthored">Include "Co-authored by Claude"</Label>
+                        <Label htmlFor="coauthored">包含"由 Claude 协作"</Label>
                         <p className="text-xs text-muted-foreground">
-                          Add Claude attribution to git commits and pull requests
+                          在 git 提交和拉取请求中添加 Claude 署名
                         </p>
                       </div>
                       <Switch
@@ -396,9 +396,9 @@ export const Settings: React.FC<SettingsProps> = ({
                     {/* Verbose Output */}
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5 flex-1">
-                        <Label htmlFor="verbose">Verbose Output</Label>
+                        <Label htmlFor="verbose">详细输出</Label>
                         <p className="text-xs text-muted-foreground">
-                          Show full bash and command outputs
+                          显示完整的 bash 和命令输出
                         </p>
                       </div>
                       <Switch
@@ -410,7 +410,7 @@ export const Settings: React.FC<SettingsProps> = ({
                     
                     {/* Cleanup Period */}
                     <div className="space-y-2">
-                      <Label htmlFor="cleanup">Chat Transcript Retention (days)</Label>
+                      <Label htmlFor="cleanup">聊天记录保留时间（天）</Label>
                       <Input
                         id="cleanup"
                         type="number"
@@ -423,16 +423,16 @@ export const Settings: React.FC<SettingsProps> = ({
                         }}
                       />
                       <p className="text-xs text-muted-foreground">
-                        How long to retain chat transcripts locally (default: 30 days)
+                        本地保留聊天记录的时间（默认：30天）
                       </p>
                     </div>
                     
                     {/* Claude Binary Path Selector */}
                     <div className="space-y-4">
                       <div>
-                        <Label className="text-sm font-medium mb-2 block">Claude Code Installation</Label>
+                        <Label className="text-sm font-medium mb-2 block">Claude Code 安装</Label>
                         <p className="text-xs text-muted-foreground mb-4">
-                          Select which Claude Code installation to use
+                          选择要使用的 Claude Code 安装版本
                         </p>
                       </div>
                       <ClaudeVersionSelector
@@ -441,7 +441,7 @@ export const Settings: React.FC<SettingsProps> = ({
                       />
                       {binaryPathChanged && (
                         <p className="text-xs text-amber-600 dark:text-amber-400">
-                          ⚠️ Claude binary path has been changed. Remember to save your settings.
+                          ⚠️ Claude 二进制路径已更改。请记得保存您的设置。
                         </p>
                       )}
                     </div>
@@ -455,16 +455,16 @@ export const Settings: React.FC<SettingsProps> = ({
               <Card className="p-6">
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-base font-semibold mb-2">Permission Rules</h3>
+                    <h3 className="text-base font-semibold mb-2">权限规则</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Control which tools Claude Code can use without manual approval
+                      控制 Claude Code 无需手动批准即可使用的工具
                     </p>
                   </div>
                   
                   {/* Allow Rules */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <Label className="text-sm font-medium text-green-500">Allow Rules</Label>
+                      <Label className="text-sm font-medium text-green-500">允许规则</Label>
                       <Button
                         variant="outline"
                         size="sm"
@@ -472,13 +472,13 @@ export const Settings: React.FC<SettingsProps> = ({
                         className="gap-2 hover:border-green-500/50 hover:text-green-500"
                       >
                         <Plus className="h-3 w-3" />
-                        Add Rule
+                        添加规则
                       </Button>
                     </div>
                     <div className="space-y-2">
                       {allowRules.length === 0 ? (
                         <p className="text-xs text-muted-foreground py-2">
-                          No allow rules configured. Claude will ask for approval for all tools.
+                          未配置允许规则。Claude 将对所有工具请求批准。
                         </p>
                       ) : (
                         allowRules.map((rule) => (
@@ -489,7 +489,7 @@ export const Settings: React.FC<SettingsProps> = ({
                             className="flex items-center gap-2"
                           >
                             <Input
-                              placeholder="e.g., Bash(npm run test:*)"
+                              placeholder="例如：Bash(npm run test:*)"
                               value={rule.value}
                               onChange={(e) => updatePermissionRule("allow", rule.id, e.target.value)}
                               className="flex-1"
@@ -511,7 +511,7 @@ export const Settings: React.FC<SettingsProps> = ({
                   {/* Deny Rules */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <Label className="text-sm font-medium text-red-500">Deny Rules</Label>
+                      <Label className="text-sm font-medium text-red-500">拒绝规则</Label>
                       <Button
                         variant="outline"
                         size="sm"
@@ -519,13 +519,13 @@ export const Settings: React.FC<SettingsProps> = ({
                         className="gap-2 hover:border-red-500/50 hover:text-red-500"
                       >
                         <Plus className="h-3 w-3" />
-                        Add Rule
+                        添加规则
                       </Button>
                     </div>
                     <div className="space-y-2">
                       {denyRules.length === 0 ? (
                         <p className="text-xs text-muted-foreground py-2">
-                          No deny rules configured.
+                          未配置拒绝规则。
                         </p>
                       ) : (
                         denyRules.map((rule) => (
@@ -536,7 +536,7 @@ export const Settings: React.FC<SettingsProps> = ({
                             className="flex items-center gap-2"
                           >
                             <Input
-                              placeholder="e.g., Bash(curl:*)"
+                              placeholder="例如：Bash(curl:*)"
                               value={rule.value}
                               onChange={(e) => updatePermissionRule("deny", rule.id, e.target.value)}
                               className="flex-1"
@@ -557,14 +557,14 @@ export const Settings: React.FC<SettingsProps> = ({
                   
                   <div className="pt-2 space-y-2">
                     <p className="text-xs text-muted-foreground">
-                      <strong>Examples:</strong>
+                      <strong>示例：</strong>
                     </p>
                     <ul className="text-xs text-muted-foreground space-y-1 ml-4">
-                      <li>• <code className="px-1 py-0.5 rounded bg-green-500/10 text-green-600 dark:text-green-400">Bash</code> - Allow all bash commands</li>
-                      <li>• <code className="px-1 py-0.5 rounded bg-green-500/10 text-green-600 dark:text-green-400">Bash(npm run build)</code> - Allow exact command</li>
-                      <li>• <code className="px-1 py-0.5 rounded bg-green-500/10 text-green-600 dark:text-green-400">Bash(npm run test:*)</code> - Allow commands with prefix</li>
-                      <li>• <code className="px-1 py-0.5 rounded bg-green-500/10 text-green-600 dark:text-green-400">Read(~/.zshrc)</code> - Allow reading specific file</li>
-                      <li>• <code className="px-1 py-0.5 rounded bg-green-500/10 text-green-600 dark:text-green-400">Edit(docs/**)</code> - Allow editing files in docs directory</li>
+                      <li>• <code className="px-1 py-0.5 rounded bg-green-500/10 text-green-600 dark:text-green-400">Bash</code> - 允许所有 bash 命令</li>
+                      <li>• <code className="px-1 py-0.5 rounded bg-green-500/10 text-green-600 dark:text-green-400">Bash(npm run build)</code> - 允许特定命令</li>
+                      <li>• <code className="px-1 py-0.5 rounded bg-green-500/10 text-green-600 dark:text-green-400">Bash(npm run test:*)</code> - 允许带前缀的命令</li>
+                      <li>• <code className="px-1 py-0.5 rounded bg-green-500/10 text-green-600 dark:text-green-400">Read(~/.zshrc)</code> - 允许读取特定文件</li>
+                      <li>• <code className="px-1 py-0.5 rounded bg-green-500/10 text-green-600 dark:text-green-400">Edit(docs/**)</code> - 允许编辑 docs 目录中的文件</li>
                     </ul>
                   </div>
                 </div>
@@ -577,9 +577,9 @@ export const Settings: React.FC<SettingsProps> = ({
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-base font-semibold">Environment Variables</h3>
+                      <h3 className="text-base font-semibold">环境变量</h3>
                       <p className="text-sm text-muted-foreground mt-1">
-                        Environment variables applied to every Claude Code session
+                        应用于每个 Claude Code 会话的环境变量
                       </p>
                     </div>
                     <Button
@@ -589,14 +589,14 @@ export const Settings: React.FC<SettingsProps> = ({
                       className="gap-2"
                     >
                       <Plus className="h-3 w-3" />
-                      Add Variable
+                      添加变量
                     </Button>
                   </div>
                   
                   <div className="space-y-3">
                     {envVars.length === 0 ? (
                       <p className="text-xs text-muted-foreground py-2">
-                        No environment variables configured.
+                        未配置环境变量。
                       </p>
                     ) : (
                       envVars.map((envVar) => (
@@ -607,14 +607,14 @@ export const Settings: React.FC<SettingsProps> = ({
                           className="flex items-center gap-2"
                         >
                           <Input
-                            placeholder="KEY"
+                            placeholder="键名"
                             value={envVar.key}
                             onChange={(e) => updateEnvVar(envVar.id, "key", e.target.value)}
                             className="flex-1 font-mono text-sm"
                           />
                           <span className="text-muted-foreground">=</span>
                           <Input
-                            placeholder="value"
+                            placeholder="值"
                             value={envVar.value}
                             onChange={(e) => updateEnvVar(envVar.id, "value", e.target.value)}
                             className="flex-1 font-mono text-sm"
@@ -634,12 +634,12 @@ export const Settings: React.FC<SettingsProps> = ({
                   
                   <div className="pt-2 space-y-2">
                     <p className="text-xs text-muted-foreground">
-                      <strong>Common variables:</strong>
+                      <strong>常用变量：</strong>
                     </p>
                     <ul className="text-xs text-muted-foreground space-y-1 ml-4">
-                      <li>• <code className="px-1 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400">CLAUDE_CODE_ENABLE_TELEMETRY</code> - Enable/disable telemetry (0 or 1)</li>
-                      <li>• <code className="px-1 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400">ANTHROPIC_MODEL</code> - Custom model name</li>
-                      <li>• <code className="px-1 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400">DISABLE_COST_WARNINGS</code> - Disable cost warnings (1)</li>
+                      <li>• <code className="px-1 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400">CLAUDE_CODE_ENABLE_TELEMETRY</code> - 启用/禁用遥测（0 或 1）</li>
+                      <li>• <code className="px-1 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400">ANTHROPIC_MODEL</code> - 自定义模型名称</li>
+                      <li>• <code className="px-1 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400">DISABLE_COST_WARNINGS</code> - 禁用成本警告（1）</li>
                     </ul>
                   </div>
                 </div>
@@ -650,15 +650,15 @@ export const Settings: React.FC<SettingsProps> = ({
               <Card className="p-6">
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-base font-semibold mb-4">Advanced Settings</h3>
+                    <h3 className="text-base font-semibold mb-4">高级设置</h3>
                     <p className="text-sm text-muted-foreground mb-6">
-                      Additional configuration options for advanced users
+                      适用于高级用户的附加配置选项
                     </p>
                   </div>
                   
                   {/* API Key Helper */}
                   <div className="space-y-2">
-                    <Label htmlFor="apiKeyHelper">API Key Helper Script</Label>
+                    <Label htmlFor="apiKeyHelper">API 密钥助手脚本</Label>
                     <Input
                       id="apiKeyHelper"
                       placeholder="/path/to/generate_api_key.sh"
@@ -666,18 +666,18 @@ export const Settings: React.FC<SettingsProps> = ({
                       onChange={(e) => updateSetting("apiKeyHelper", e.target.value || undefined)}
                     />
                     <p className="text-xs text-muted-foreground">
-                      Custom script to generate auth values for API requests
+                      用于生成 API 请求认证值的自定义脚本
                     </p>
                   </div>
                   
                   {/* Raw JSON Editor */}
                   <div className="space-y-2">
-                    <Label>Raw Settings (JSON)</Label>
+                    <Label>原始设置 (JSON)</Label>
                     <div className="p-3 rounded-md bg-muted font-mono text-xs overflow-x-auto whitespace-pre-wrap">
                       <pre>{JSON.stringify(settings, null, 2)}</pre>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      This shows the raw JSON that will be saved to ~/.claude/settings.json
+                      这显示将保存到 ~/.claude/settings.json 的原始 JSON
                     </p>
                   </div>
                 </div>

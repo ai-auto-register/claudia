@@ -37,7 +37,7 @@ interface AgentRunViewProps {
 }
 
 /**
- * AgentRunView component for viewing past agent execution details
+ * AgentRunView 组件，用于查看过去的代理执行详细信息
  * 
  * @example
  * <AgentRunView runId={123} onBack={() => setView('list')} />
@@ -97,53 +97,69 @@ export const AgentRunView: React.FC<AgentRunViewProps> = ({
   const handleCopyAsMarkdown = async () => {
     if (!run) return;
     
-    let markdown = `# Agent Execution: ${run.agent_name}\n\n`;
-    markdown += `**Task:** ${run.task}\n`;
-    markdown += `**Model:** ${run.model === 'opus' ? 'Claude 4 Opus' : 'Claude 4 Sonnet'}\n`;
-    markdown += `**Date:** ${formatISOTimestamp(run.created_at)}\n`;
-    if (run.metrics?.duration_ms) markdown += `**Duration:** ${(run.metrics.duration_ms / 1000).toFixed(2)}s\n`;
-    if (run.metrics?.total_tokens) markdown += `**Total Tokens:** ${run.metrics.total_tokens}\n`;
-    if (run.metrics?.cost_usd) markdown += `**Cost:** $${run.metrics.cost_usd.toFixed(4)} USD\n`;
-    markdown += `\n---\n\n`;
+    let markdown = `# 代理执行: ${run.agent_name}
+
+`;
+    markdown += `**任务:** ${run.task}
+`;
+    markdown += `**模型:** ${run.model === 'opus' ? 'Claude 4 Opus' : 'Claude 4 Sonnet'}
+`;
+    markdown += `**日期:** ${formatISOTimestamp(run.created_at)}
+`;
+    if (run.metrics?.duration_ms) markdown += `**持续时间:** ${(run.metrics.duration_ms / 1000).toFixed(2)}s
+`;
+    if (run.metrics?.total_tokens) markdown += `**总令牌数:** ${run.metrics.total_tokens}
+`;
+    if (run.metrics?.cost_usd) markdown += `**成本:** ${run.metrics.cost_usd.toFixed(4)} USD
+`;
+    markdown += `
+---
+
+`;
 
     for (const msg of messages) {
       if (msg.type === "system" && msg.subtype === "init") {
-        markdown += `## System Initialization\n\n`;
-        markdown += `- Session ID: \`${msg.session_id || 'N/A'}\`\n`;
-        markdown += `- Model: \`${msg.model || 'default'}\`\n`;
-        if (msg.cwd) markdown += `- Working Directory: \`${msg.cwd}\`\n`;
-        if (msg.tools?.length) markdown += `- Tools: ${msg.tools.join(', ')}\n`;
+        markdown += `## 系统初始化
+
+`;
+        markdown += `- 会话 ID: \`${msg.session_id || 'N/A'}\`\n`;
+        markdown += `- 模型: \`${msg.model || 'default'}\`\n`;
+        if (msg.cwd) markdown += `- 工作目录: \`${msg.cwd}\`\n`;
+        if (msg.tools?.length) markdown += `- 工具: ${msg.tools.join(', ')}\n`;
         markdown += `\n`;
       } else if (msg.type === "assistant" && msg.message) {
-        markdown += `## Assistant\n\n`;
+        markdown += `## 助手
+
+`;
         for (const content of msg.message.content || []) {
           if (content.type === "text") {
             markdown += `${content.text}\n\n`;
           } else if (content.type === "tool_use") {
-            markdown += `### Tool: ${content.name}\n\n`;
+            markdown += `### 工具: ${content.name}\n\n`;
             markdown += `\`\`\`json\n${JSON.stringify(content.input, null, 2)}\n\`\`\`\n\n`;
           }
         }
         if (msg.message.usage) {
-          markdown += `*Tokens: ${msg.message.usage.input_tokens} in, ${msg.message.usage.output_tokens} out*\n\n`;
+          markdown += `*令牌: ${msg.message.usage.input_tokens} 输入, ${msg.message.usage.output_tokens} 输出*\n\n`;
         }
       } else if (msg.type === "user" && msg.message) {
-        markdown += `## User\n\n`;
+        markdown += `## 用户\n\n`;
         for (const content of msg.message.content || []) {
           if (content.type === "text") {
             markdown += `${content.text}\n\n`;
-          } else if (content.type === "tool_result") {
-            markdown += `### Tool Result\n\n`;
+          }
+          else if (content.type === "tool_result") {
+            markdown += `### 工具结果\n\n`;
             markdown += `\`\`\`\n${content.content}\n\`\`\`\n\n`;
           }
         }
       } else if (msg.type === "result") {
-        markdown += `## Execution Result\n\n`;
+        markdown += `## 执行结果\n\n`;
         if (msg.result) {
           markdown += `${msg.result}\n\n`;
         }
         if (msg.error) {
-          markdown += `**Error:** ${msg.error}\n\n`;
+          markdown += `**错误:** ${msg.error}\n\n`;
         }
       }
     }
@@ -168,8 +184,8 @@ export const AgentRunView: React.FC<AgentRunViewProps> = ({
   if (error || !run) {
     return (
       <div className={cn("flex flex-col items-center justify-center h-full", className)}>
-        <p className="text-destructive mb-4">{error || "Run not found"}</p>
-        <Button onClick={onBack}>Go Back</Button>
+        <p className="text-destructive mb-4">{error || "找不到运行记录"}</p>
+        <Button onClick={onBack}>返回</Button>
       </div>
     );
   }
@@ -197,7 +213,7 @@ export const AgentRunView: React.FC<AgentRunViewProps> = ({
               {renderIcon(run.agent_icon)}
               <div>
                 <h2 className="text-lg font-semibold">{run.agent_name}</h2>
-                <p className="text-xs text-muted-foreground">Execution History</p>
+                <p className="text-xs text-muted-foreground">执行历史</p>
               </div>
             </div>
           </div>
@@ -210,7 +226,7 @@ export const AgentRunView: React.FC<AgentRunViewProps> = ({
                 className="flex items-center gap-2"
               >
                 <Copy className="h-4 w-4" />
-                Copy Output
+                复制输出
                 <ChevronDown className="h-3 w-3" />
               </Button>
             }
@@ -222,7 +238,7 @@ export const AgentRunView: React.FC<AgentRunViewProps> = ({
                   className="w-full justify-start"
                   onClick={handleCopyAsJsonl}
                 >
-                  Copy as JSONL
+                  复制为 JSONL
                 </Button>
                 <Button
                   variant="ghost"
@@ -230,7 +246,7 @@ export const AgentRunView: React.FC<AgentRunViewProps> = ({
                   className="w-full justify-start"
                   onClick={handleCopyAsMarkdown}
                 >
-                  Copy as Markdown
+                  复制为 Markdown
                 </Button>
               </div>
             }
@@ -245,7 +261,7 @@ export const AgentRunView: React.FC<AgentRunViewProps> = ({
           <CardContent className="p-4">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-medium">Task:</h3>
+                <h3 className="text-sm font-medium">任务:</h3>
                 <p className="text-sm text-muted-foreground flex-1">{run.task}</p>
                 <Badge variant="outline" className="text-xs">
                   {run.model === 'opus' ? 'Claude 4 Opus' : 'Claude 4 Sonnet'}

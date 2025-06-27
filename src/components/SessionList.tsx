@@ -27,7 +27,7 @@ interface SessionListProps {
    */
   onSessionClick?: (session: Session) => void;
   /**
-   * Callback when a CLAUDE.md file should be edited
+   * 当需要编辑 CLAUDE.md 文件时的回调
    */
   onEditClaudeFile?: (file: ClaudeMdFile) => void;
   /**
@@ -39,14 +39,14 @@ interface SessionListProps {
 const ITEMS_PER_PAGE = 5;
 
 /**
- * SessionList component - Displays paginated sessions for a specific project
+ * SessionList 组件 - 显示特定项目的分页会话
  * 
  * @example
  * <SessionList
  *   sessions={sessions}
  *   projectPath="/Users/example/project"
  *   onBack={() => setSelectedProject(null)}
- *   onSessionClick={(session) => console.log('Selected session:', session)}
+ *   onSessionClick={(session) => console.log('已选择会话:', session)}
  * />
  */
 export const SessionList: React.FC<SessionListProps> = ({
@@ -89,12 +89,12 @@ export const SessionList: React.FC<SessionListProps> = ({
         <div className="flex-1 min-w-0">
           <h2 className="text-base font-medium truncate">{projectPath}</h2>
           <p className="text-xs text-muted-foreground">
-            {sessions.length} session{sessions.length !== 1 ? 's' : ''}
+            {sessions.length} 个会话
           </p>
         </div>
       </motion.div>
 
-      {/* CLAUDE.md Memories Dropdown */}
+      {/* CLAUDE.md 记忆下拉菜单 */}
       {onEditClaudeFile && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -149,7 +149,7 @@ export const SessionList: React.FC<SessionListProps> = ({
                             <div className="space-y-1">
                               <div className="flex items-center space-x-1 text-xs text-muted-foreground">
                                 <MessageSquare className="h-3 w-3" />
-                                <span>First message:</span>
+                                <span>第一条消息:</span>
                               </div>
                               <p className="text-xs line-clamp-2 text-foreground/80">
                                 {truncateText(getFirstLine(session.first_message), 100)}
@@ -173,7 +173,7 @@ export const SessionList: React.FC<SessionListProps> = ({
                             {session.todo_data && (
                               <div className="flex items-center space-x-1">
                                 <Calendar className="h-3 w-3" />
-                                <span>Has todo</span>
+                                <span>有待办事项</span>
                               </div>
                             )}
                           </div>

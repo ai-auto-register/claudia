@@ -52,7 +52,7 @@ interface ClaudeCodeSessionProps {
 }
 
 /**
- * ClaudeCodeSession component for interactive Claude Code sessions
+ * ClaudeCodeSession 组件，用于交互式 Claude Code 会话
  * 
  * @example
  * <ClaudeCodeSession onBack={() => setView('projects')} />
@@ -269,7 +269,7 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
     console.log('[ClaudeCodeSession] handleSendPrompt called with:', { prompt, model, projectPath });
     
     if (!projectPath) {
-      setError("Please select a project directory first");
+      setError("请先选择项目目录");
       return;
     }
 
@@ -402,21 +402,21 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
   };
 
   const handleCopyAsMarkdown = async () => {
-    let markdown = `# Claude Code Session\n\n`;
-    markdown += `**Project:** ${projectPath}\n`;
-    markdown += `**Date:** ${new Date().toISOString()}\n\n`;
+    let markdown = "# Claude Code 会话\n\n";
+    markdown += `**项目:** ${projectPath}\n`;
+    markdown += `**日期:** ${new Date().toISOString()}\n\n`;
     markdown += `---\n\n`;
 
     for (const msg of messages) {
       if (msg.type === "system" && msg.subtype === "init") {
-        markdown += `## System Initialization\n\n`;
-        markdown += `- Session ID: \`${msg.session_id || 'N/A'}\`\n`;
-        markdown += `- Model: \`${msg.model || 'default'}\`\n`;
-        if (msg.cwd) markdown += `- Working Directory: \`${msg.cwd}\`\n`;
-        if (msg.tools?.length) markdown += `- Tools: ${msg.tools.join(', ')}\n`;
+        markdown += `## 系统初始化\n\n`;
+        markdown += `- 会话 ID: \`${msg.session_id || 'N/A'}\`\n`;
+        markdown += `- 模型: \`${msg.model || 'default'}\`\n`;
+        if (msg.cwd) markdown += `- 工作目录: \`${msg.cwd}\`\n`;
+        if (msg.tools?.length) markdown += `- 工具: ${msg.tools.join(', ')}\n`;
         markdown += `\n`;
       } else if (msg.type === "assistant" && msg.message) {
-        markdown += `## Assistant\n\n`;
+        markdown += `## 助手\n\n`;
         for (const content of msg.message.content || []) {
           if (content.type === "text") {
             const textContent = typeof content.text === 'string' 
@@ -424,15 +424,15 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
               : (content.text?.text || JSON.stringify(content.text || content));
             markdown += `${textContent}\n\n`;
           } else if (content.type === "tool_use") {
-            markdown += `### Tool: ${content.name}\n\n`;
+            markdown += `### 工具: ${content.name}\n\n`;
             markdown += `\`\`\`json\n${JSON.stringify(content.input, null, 2)}\n\`\`\`\n\n`;
           }
         }
         if (msg.message.usage) {
-          markdown += `*Tokens: ${msg.message.usage.input_tokens} in, ${msg.message.usage.output_tokens} out*\n\n`;
+          markdown += `*令牌: ${msg.message.usage.input_tokens} 输入, ${msg.message.usage.output_tokens} 输出*\n\n`;
         }
       } else if (msg.type === "user" && msg.message) {
-        markdown += `## User\n\n`;
+        markdown += `## 用户\n\n`;
         for (const content of msg.message.content || []) {
           if (content.type === "text") {
             const textContent = typeof content.text === 'string' 
@@ -440,7 +440,7 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
               : (content.text?.text || JSON.stringify(content.text));
             markdown += `${textContent}\n\n`;
           } else if (content.type === "tool_result") {
-            markdown += `### Tool Result\n\n`;
+            markdown += `### 工具结果\n\n`;
             let contentText = '';
             if (typeof content.content === 'string') {
               contentText = content.content;
@@ -459,12 +459,12 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
           }
         }
       } else if (msg.type === "result") {
-        markdown += `## Execution Result\n\n`;
+        markdown += `## 执行结果\n\n`;
         if (msg.result) {
           markdown += `${msg.result}\n\n`;
         }
         if (msg.error) {
-          markdown += `**Error:** ${msg.error}\n\n`;
+          markdown += `**错误:** ${msg.error}\n\n`;
         }
       }
     }
@@ -679,14 +679,14 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
       className="p-4 border-b border-border flex-shrink-0"
     >
       <Label htmlFor="project-path" className="text-sm font-medium">
-        Project Directory
+        项目目录
       </Label>
       <div className="flex items-center gap-2 mt-1">
         <Input
           id="project-path"
           value={projectPath}
           onChange={(e) => setProjectPath(e.target.value)}
-          placeholder="/path/to/your/project"
+          placeholder="/您的项目路径"
           className="flex-1"
           disabled={isLoading}
         />
@@ -750,9 +750,9 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
             <div className="flex items-center gap-2">
               <Terminal className="h-5 w-5" />
               <div>
-                <h2 className="text-lg font-semibold">Claude Code Session</h2>
+                <h2 className="text-lg font-semibold">Claude Code 会话</h2>
                 <p className="text-xs text-muted-foreground">
-                  {session ? `Resuming session ${session.id.slice(0, 8)}...` : 'Interactive session'}
+                  {session ? `正在恢复会话 ${session.id.slice(0, 8)}...` : '交互式会话'}
                 </p>
               </div>
             </div>
@@ -768,7 +768,7 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
                   className="flex items-center gap-2"
                 >
                   <Settings className="h-4 w-4" />
-                  Settings
+                  设置
                 </Button>
                 <Button
                   variant="outline"
@@ -777,7 +777,7 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
                   className="flex items-center gap-2"
                 >
                   <GitBranch className="h-4 w-4" />
-                  Timeline
+                  时间线
                 </Button>
               </>
             )}
@@ -800,13 +800,13 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
                     className="flex items-center gap-2"
                   >
                     <Globe className="h-4 w-4" />
-                    {showPreview ? "Close Preview" : "Preview"}
+                    {showPreview ? "关闭预览" : "预览"}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
                   {showPreview 
-                    ? "Close the preview pane" 
-                    : "Open a browser preview to test your web applications"
+                    ? "关闭预览面板" 
+                    : "打开浏览器预览以测试您的 Web 应用程序"
                   }
                 </TooltipContent>
               </Tooltip>
@@ -821,7 +821,7 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
                     className="flex items-center gap-2"
                   >
                     <Copy className="h-4 w-4" />
-                    Copy Output
+                    复制输出
                     <ChevronDown className="h-3 w-3" />
                   </Button>
                 }
@@ -833,7 +833,7 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
                       onClick={handleCopyAsMarkdown}
                       className="w-full justify-start"
                     >
-                      Copy as Markdown
+                      复制为 Markdown
                     </Button>
                     <Button
                       variant="ghost"
@@ -841,7 +841,7 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
                       onClick={handleCopyAsJsonl}
                       className="w-full justify-start"
                     >
-                      Copy as JSONL
+                      复制为 JSONL
                     </Button>
                   </div>
                 }
@@ -894,7 +894,7 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
               <div className="flex items-center gap-3">
                 <Loader2 className="h-6 w-6 animate-spin" />
                 <span className="text-sm text-muted-foreground">
-                  {session ? "Loading session history..." : "Initializing Claude Code..."}
+                  {session ? "正在加载会话历史..." : "正在初始化 Claude Code..."}
                 </span>
               </div>
             </div>
@@ -931,18 +931,18 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
       <Dialog open={showForkDialog} onOpenChange={setShowForkDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Fork Session</DialogTitle>
+            <DialogTitle>分支会话</DialogTitle>
             <DialogDescription>
-              Create a new session branch from the selected checkpoint.
+              从选定的检查点创建新的会话分支。
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="fork-name">New Session Name</Label>
+              <Label htmlFor="fork-name">新会话名称</Label>
               <Input
                 id="fork-name"
-                placeholder="e.g., Alternative approach"
+                placeholder="例如：替代方法"
                 value={forkSessionName}
                 onChange={(e) => setForkSessionName(e.target.value)}
                 onKeyPress={(e) => {
@@ -960,13 +960,13 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
               onClick={() => setShowForkDialog(false)}
               disabled={isLoading}
             >
-              Cancel
+              取消
             </Button>
             <Button
               onClick={handleConfirmFork}
               disabled={isLoading || !forkSessionName.trim()}
             >
-              Create Fork
+              创建分支
             </Button>
           </DialogFooter>
         </DialogContent>

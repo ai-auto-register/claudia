@@ -74,35 +74,35 @@ type ThinkingModeConfig = {
 const THINKING_MODES: ThinkingModeConfig[] = [
   {
     id: "auto",
-    name: "Auto",
-    description: "Let Claude decide",
+    name: "自动",
+    description: "让 Claude 决定",
     level: 0
   },
   {
     id: "think",
-    name: "Think",
-    description: "Basic reasoning",
+    name: "思考",
+    description: "基本推理",
     level: 1,
     phrase: "think"
   },
   {
     id: "think_hard",
-    name: "Think Hard",
-    description: "Deeper analysis",
+    name: "深入思考",
+    description: "更深层次的分析",
     level: 2,
     phrase: "think hard"
   },
   {
     id: "think_harder",
-    name: "Think Harder",
-    description: "Extensive reasoning",
+    name: "更深入思考",
+    description: "广泛推理",
     level: 3,
     phrase: "think harder"
   },
   {
     id: "ultrathink",
-    name: "Ultrathink",
-    description: "Maximum computation",
+    name: "超级思考",
+    description: "最大化计算",
     level: 4,
     phrase: "ultrathink"
   }
@@ -138,25 +138,25 @@ const MODELS: Model[] = [
   {
     id: "sonnet",
     name: "Claude 4 Sonnet",
-    description: "Faster, efficient for most tasks",
+    description: "更快，对大多数任务更高效",
     icon: <Zap className="h-4 w-4" />
   },
   {
     id: "opus",
     name: "Claude 4 Opus",
-    description: "More capable, better for complex tasks",
+    description: "能力更强，更适合复杂任务",
     icon: <Sparkles className="h-4 w-4" />
   }
 ];
 
 /**
- * FloatingPromptInput component - Fixed position prompt input with model picker
+ * FloatingPromptInput 组件 - 带有模型选择器的固定位置提示输入
  * 
  * @example
  * const promptRef = useRef<FloatingPromptInputRef>(null);
  * <FloatingPromptInput
  *   ref={promptRef}
- *   onSend={(prompt, model) => console.log('Send:', prompt, model)}
+ *   onSend={(prompt, model) => console.log('发送:', prompt, model)}
  *   isLoading={false}
  * />
  */
@@ -490,7 +490,7 @@ const FloatingPromptInputInner = (
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium">Compose your prompt</h3>
+                <h3 className="text-sm font-medium">编写您的提示</h3>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -514,7 +514,7 @@ const FloatingPromptInputInner = (
                 ref={expandedTextareaRef}
                 value={prompt}
                 onChange={handleTextChange}
-                placeholder="Type your prompt here..."
+                placeholder="在此输入您的提示..."
                 className="min-h-[200px] resize-none"
                 disabled={isLoading || disabled}
                 onDragEnter={handleDrag}
@@ -526,7 +526,7 @@ const FloatingPromptInputInner = (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-muted-foreground">Model:</span>
+                    <span className="text-xs text-muted-foreground">模型:</span>
                     <Button
                       variant="outline"
                       size="sm"
@@ -539,7 +539,7 @@ const FloatingPromptInputInner = (
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-muted-foreground">Thinking:</span>
+                    <span className="text-xs text-muted-foreground">思考模式:</span>
                     <Popover
                       trigger={
                         <TooltipProvider>
@@ -808,7 +808,7 @@ const FloatingPromptInputInner = (
             </div>
 
             <div className="mt-2 text-xs text-muted-foreground">
-              Press Enter to send, Shift+Enter for new line{projectPath?.trim() && ", @ to mention files, drag & drop images"}
+              按 Enter 发送，Shift+Enter 换行{projectPath?.trim() && "，@ 提及文件，拖放图片"}
             </div>
           </div>
         </div>

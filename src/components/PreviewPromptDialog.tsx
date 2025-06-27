@@ -31,7 +31,7 @@ interface PreviewPromptDialogProps {
 }
 
 /**
- * Dialog component that prompts the user to open a detected URL in the preview pane
+ * 对话框组件，提示用户在预览窗格中打开检测到的 URL
  * 
  * @example
  * <PreviewPromptDialog
@@ -66,10 +66,10 @@ export const PreviewPromptDialog: React.FC<PreviewPromptDialogProps> = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Globe className="h-5 w-5 text-primary" />
-            Open Preview?
+            打开预览？
           </DialogTitle>
           <DialogDescription>
-            A URL was detected in the terminal output. Would you like to open it in the preview pane?
+            在终端输出中检测到一个 URL。您想在预览窗格中打开它吗？
           </DialogDescription>
         </DialogHeader>
         
@@ -79,7 +79,7 @@ export const PreviewPromptDialog: React.FC<PreviewPromptDialogProps> = ({
               <ExternalLink className={`h-4 w-4 mt-0.5 ${isLocalhost ? 'text-green-500' : 'text-blue-500'}`} />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium">
-                  {isLocalhost ? 'Local Development Server' : 'External URL'}
+                  {isLocalhost ? '本地开发服务器' : '外部 URL'}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1 break-all">
                   {url}
@@ -94,17 +94,17 @@ export const PreviewPromptDialog: React.FC<PreviewPromptDialogProps> = ({
             transition={{ delay: 0.1 }}
             className="mt-3 text-xs text-muted-foreground"
           >
-            The preview will open in a split view on the right side of the screen.
+            预览将在屏幕右侧的拆分视图中打开。
           </motion.div>
         </div>
         
         <DialogFooter>
           <Button variant="outline" onClick={onCancel}>
-            Cancel
+            取消
           </Button>
           <Button onClick={onConfirm} className="gap-2">
             <ExternalLink className="h-4 w-4" />
-            Open Preview
+            打开预览
           </Button>
         </DialogFooter>
       </DialogContent>

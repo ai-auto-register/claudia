@@ -13,8 +13,8 @@ interface ExecutionControlBarProps {
 }
 
 /**
- * Floating control bar shown during agent execution
- * Provides stop functionality and real-time statistics
+ * 代理执行期间显示的浮动控制栏
+ * 提供停止功能和实时统计信息
  */
 export const ExecutionControlBar: React.FC<ExecutionControlBarProps> = ({ 
   isExecuting, 
@@ -62,7 +62,7 @@ export const ExecutionControlBar: React.FC<ExecutionControlBarProps> = ({
           </div>
 
           {/* Status text */}
-          <span className="text-sm font-medium">Executing...</span>
+          <span className="text-sm font-medium">正在执行...</span>
 
           {/* Divider */}
           <div className="h-4 w-px bg-border" />
@@ -78,7 +78,7 @@ export const ExecutionControlBar: React.FC<ExecutionControlBarProps> = ({
             {/* Tokens */}
             <div className="flex items-center gap-1.5">
               <Hash className="h-3.5 w-3.5" />
-              <span>{formatTokens(totalTokens)} tokens</span>
+              <span>{formatTokens(totalTokens)} 令牌</span>
             </div>
           </div>
 
@@ -93,7 +93,7 @@ export const ExecutionControlBar: React.FC<ExecutionControlBarProps> = ({
             className="gap-2"
           >
             <StopCircle className="h-3.5 w-3.5" />
-            Stop
+            停止
           </Button>
         </motion.div>
       )}

@@ -59,7 +59,7 @@ export const AGENT_ICONS = ICON_MAP;
 export type AgentIconName = keyof typeof AGENT_ICONS;
 
 /**
- * CCAgents component for managing Claude Code agents
+ * CCAgents 组件，用于管理 Claude Code 代理
  * 
  * @example
  * <CCAgents onBack={() => setView('home')} />
@@ -310,9 +310,9 @@ export const CCAgents: React.FC<CCAgentsProps> = ({ onBack, className }) => {
                 <ArrowLeft className="h-4 w-4" />
               </Button>
               <div>
-                <h1 className="text-2xl font-bold">CC Agents</h1>
+                <h1 className="text-2xl font-bold">CC 代理</h1>
                 <p className="text-sm text-muted-foreground">
-                  Manage your Claude Code agents
+                  管理您的 Claude Code 代理
                 </p>
               </div>
             </div>
@@ -325,18 +325,18 @@ export const CCAgents: React.FC<CCAgentsProps> = ({ onBack, className }) => {
                     className="flex items-center gap-2"
                   >
                     <Download className="h-4 w-4" />
-                    Import
+                    导入
                     <ChevronDown className="h-3 w-3" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onClick={handleImportAgent}>
                     <FileJson className="h-4 w-4 mr-2" />
-                    From File
+                    从文件
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setShowGitHubBrowser(true)}>
                     <Globe className="h-4 w-4 mr-2" />
-                    From GitHub
+                    从 GitHub
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -346,7 +346,7 @@ export const CCAgents: React.FC<CCAgentsProps> = ({ onBack, className }) => {
                 className="flex items-center gap-2"
               >
                 <Plus className="h-4 w-4" />
-                Create CC Agent
+                创建 CC 代理
               </Button>
             </div>
           </div>
@@ -377,7 +377,7 @@ export const CCAgents: React.FC<CCAgentsProps> = ({ onBack, className }) => {
             >
               <div className="flex items-center gap-2">
                 <Bot className="h-4 w-4" />
-                Agents
+                代理
               </div>
             </button>
             <button
@@ -391,7 +391,7 @@ export const CCAgents: React.FC<CCAgentsProps> = ({ onBack, className }) => {
             >
               <div className="flex items-center gap-2">
                 <Play className="h-4 w-4" />
-                Running Sessions
+                运行中的会话
               </div>
             </button>
           </nav>
@@ -418,13 +418,13 @@ export const CCAgents: React.FC<CCAgentsProps> = ({ onBack, className }) => {
                   ) : agents.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-64 text-center">
                       <Bot className="h-16 w-16 text-muted-foreground mb-4" />
-                      <h3 className="text-lg font-medium mb-2">No agents yet</h3>
+                      <h3 className="text-lg font-medium mb-2">尚无代理</h3>
                       <p className="text-sm text-muted-foreground mb-4">
-                        Create your first CC Agent to get started
+                        创建您的第一个 CC 代理以开始使用
                       </p>
                       <Button onClick={() => setView("create")} size="default">
                         <Plus className="h-4 w-4 mr-2" />
-                        Create CC Agent
+                        创建 CC 代理
                       </Button>
                     </div>
                   ) : (
@@ -457,40 +457,40 @@ export const CCAgents: React.FC<CCAgentsProps> = ({ onBack, className }) => {
                                     variant="ghost"
                                     onClick={() => handleExecuteAgent(agent)}
                                     className="flex items-center gap-1"
-                                    title="Execute agent"
+                                    title="执行代理"
                                   >
                                     <Play className="h-3 w-3" />
-                                    Execute
+                                    执行
                                   </Button>
                                   <Button
                                     size="sm"
                                     variant="ghost"
                                     onClick={() => handleEditAgent(agent)}
                                     className="flex items-center gap-1"
-                                    title="Edit agent"
+                                    title="编辑代理"
                                   >
                                     <Edit className="h-3 w-3" />
-                                    Edit
+                                    编辑
                                   </Button>
                                   <Button
                                     size="sm"
                                     variant="ghost"
                                     onClick={() => handleExportAgent(agent)}
                                     className="flex items-center gap-1"
-                                    title="Export agent to .claudia.json"
+                                    title="导出代理到 .claudia.json"
                                   >
                                     <Upload className="h-3 w-3" />
-                                    Export
+                                    导出
                                   </Button>
                                   <Button
                                     size="sm"
                                     variant="ghost"
                                     onClick={() => handleDeleteAgent(agent)}
                                     className="flex items-center gap-1 text-destructive hover:text-destructive"
-                                    title="Delete agent"
+                                    title="删除代理"
                                   >
                                     <Trash2 className="h-3 w-3" />
-                                    Delete
+                                    删除
                                   </Button>
                                 </CardFooter>
                               </Card>
@@ -508,10 +508,10 @@ export const CCAgents: React.FC<CCAgentsProps> = ({ onBack, className }) => {
                             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                             disabled={currentPage === 1}
                           >
-                            Previous
+                            上一页
                           </Button>
                           <span className="flex items-center px-3 text-sm">
-                            Page {currentPage} of {totalPages}
+                            第 {currentPage} 页 / 共 {totalPages} 页
                           </span>
                           <Button
                             size="sm"
@@ -519,7 +519,7 @@ export const CCAgents: React.FC<CCAgentsProps> = ({ onBack, className }) => {
                             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                             disabled={currentPage === totalPages}
                           >
-                            Next
+                            下一页
                           </Button>
                         </div>
                       )}
@@ -532,7 +532,7 @@ export const CCAgents: React.FC<CCAgentsProps> = ({ onBack, className }) => {
                   <div className="overflow-hidden">
                     <div className="flex items-center gap-2 mb-4">
                       <History className="h-5 w-5 text-muted-foreground" />
-                      <h2 className="text-lg font-semibold">Recent Executions</h2>
+                      <h2 className="text-lg font-semibold">最近执行</h2>
                     </div>
                     {runsLoading ? (
                       <div className="flex items-center justify-center h-32">
@@ -592,11 +592,11 @@ export const CCAgents: React.FC<CCAgentsProps> = ({ onBack, className }) => {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Trash2 className="h-5 w-5 text-destructive" />
-              Delete Agent
+              删除代理
             </DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the agent "{agentToDelete?.name}"? 
-              This action cannot be undone and will permanently remove the agent and all its associated data.
+              您确定要删除代理 "{agentToDelete?.name}" 吗？
+              此操作无法撤消，并将永久删除代理及其所有相关数据。
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
@@ -606,7 +606,7 @@ export const CCAgents: React.FC<CCAgentsProps> = ({ onBack, className }) => {
               disabled={isDeleting}
               className="w-full sm:w-auto"
             >
-              Cancel
+              取消
             </Button>
             <Button
               variant="destructive"
@@ -617,12 +617,12 @@ export const CCAgents: React.FC<CCAgentsProps> = ({ onBack, className }) => {
               {isDeleting ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                  Deleting...
+                  正在删除...
                 </>
               ) : (
                 <>
                   <Trash2 className="h-4 w-4 mr-2" />
-                  Delete Agent
+                  删除代理
                 </>
               )}
             </Button>

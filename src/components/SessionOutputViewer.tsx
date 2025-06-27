@@ -345,19 +345,19 @@ export function SessionOutputViewer({ session, onClose, className }: SessionOutp
               <div className="flex items-center space-x-3">
                 <div className="text-2xl">{session.agent_icon}</div>
                 <div>
-                  <CardTitle className="text-base">{session.agent_name} - Output</CardTitle>
+                  <CardTitle className="text-base">{session.agent_name} - 输出</CardTitle>
                   <div className="flex items-center space-x-2 mt-1">
                     <Badge variant={session.status === 'running' ? 'default' : 'secondary'}>
-                      {session.status}
+                      {session.status === 'running' ? "运行中" : session.status === "completed" ? "已完成" : session.status === "failed" ? "失败" : session.status === "cancelled" ? "已取消" : session.status}
                     </Badge>
                     {session.status === 'running' && (
                       <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
                         <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse mr-1"></div>
-                        Live
+                        实时
                       </Badge>
                     )}
                     <span className="text-xs text-muted-foreground">
-                      {messages.length} messages
+                      {messages.length} 条消息
                     </span>
                   </div>
                 </div>
@@ -381,7 +381,7 @@ export function SessionOutputViewer({ session, onClose, className }: SessionOutp
                           className="flex items-center gap-2"
                         >
                           <Copy className="h-4 w-4" />
-                          Copy Output
+                          复制输出
                           <ChevronDown className="h-3 w-3" />
                         </Button>
                       }
@@ -393,7 +393,7 @@ export function SessionOutputViewer({ session, onClose, className }: SessionOutp
                             className="w-full justify-start"
                             onClick={handleCopyAsJsonl}
                           >
-                            Copy as JSONL
+                            复制为 JSONL
                           </Button>
                           <Button
                             variant="ghost"
@@ -401,7 +401,7 @@ export function SessionOutputViewer({ session, onClose, className }: SessionOutp
                             className="w-full justify-start"
                             onClick={handleCopyAsMarkdown}
                           >
-                            Copy as Markdown
+                            复制为 Markdown
                           </Button>
                         </div>
                       }
@@ -416,7 +416,7 @@ export function SessionOutputViewer({ session, onClose, className }: SessionOutp
                   size="sm"
                   onClick={refreshOutput}
                   disabled={refreshing}
-                  title="Refresh output"
+                  title="刷新输出"
                 >
                   <RotateCcw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
                 </Button>
@@ -431,7 +431,7 @@ export function SessionOutputViewer({ session, onClose, className }: SessionOutp
               <div className="flex items-center justify-center h-full">
                 <div className="flex items-center space-x-2">
                   <RefreshCw className="h-4 w-4 animate-spin" />
-                  <span>Loading output...</span>
+                  <span>正在加载输出...</span>
                 </div>
               </div>
             ) : (
@@ -455,14 +455,14 @@ export function SessionOutputViewer({ session, onClose, className }: SessionOutp
                     {session.status === 'running' ? (
                       <>
                         <RefreshCw className="h-8 w-8 animate-spin text-muted-foreground mb-2" />
-                        <p className="text-muted-foreground">Waiting for output...</p>
+                        <p className="text-muted-foreground">正在等待输出...</p>
                         <p className="text-xs text-muted-foreground mt-1">
-                          Agent is running but no output received yet
+                          代理正在运行，但尚未收到输出
                         </p>
                       </>
                     ) : (
                       <>
-                        <p className="text-muted-foreground">No output available</p>
+                        <p className="text-muted-foreground">没有可用输出</p>
                         <Button 
                           variant="outline" 
                           size="sm" 
@@ -471,7 +471,7 @@ export function SessionOutputViewer({ session, onClose, className }: SessionOutp
                           disabled={refreshing}
                         >
                           {refreshing ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <RotateCcw className="h-4 w-4 mr-2" />}
-                          Refresh
+                          刷新
                         </Button>
                       </>
                     )}
@@ -508,7 +508,7 @@ export function SessionOutputViewer({ session, onClose, className }: SessionOutp
           <div className="flex items-center justify-between p-4 border-b border-border">
             <div className="flex items-center gap-2">
               <div className="text-2xl">{session.agent_icon}</div>
-              <h2 className="text-lg font-semibold">{session.agent_name} - Output</h2>
+              <h2 className="text-lg font-semibold">{session.agent_name} - 输出</h2>
               {session.status === 'running' && (
                 <div className="flex items-center gap-1">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -562,7 +562,7 @@ export function SessionOutputViewer({ session, onClose, className }: SessionOutp
                 className="flex items-center gap-2"
               >
                 <X className="h-4 w-4" />
-                Close
+                关闭
               </Button>
             </div>
           </div>
@@ -589,14 +589,14 @@ export function SessionOutputViewer({ session, onClose, className }: SessionOutp
                   {session.status === 'running' ? (
                     <>
                       <RefreshCw className="h-8 w-8 animate-spin text-muted-foreground mb-2" />
-                      <p className="text-muted-foreground">Waiting for output...</p>
+                      <p className="text-muted-foreground">正在等待输出...</p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Agent is running but no output received yet
+                        代理正在运行，但尚未收到输出
                       </p>
                     </>
                   ) : (
                     <>
-                      <p className="text-muted-foreground">No output available</p>
+                      <p className="text-muted-foreground">没有可用输出</p>
                     </>
                   )}
                 </div>

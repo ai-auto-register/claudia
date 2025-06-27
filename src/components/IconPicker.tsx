@@ -150,7 +150,7 @@ import { cn } from "@/lib/utils";
  * Icon categories for better organization
  */
 const ICON_CATEGORIES = {
-  "Interface & Navigation": [
+  "界面与导航": [
     { name: "home", icon: Home },
     { name: "menu", icon: Menu },
     { name: "settings", icon: Settings },
@@ -186,7 +186,7 @@ const ICON_CATEGORIES = {
     { name: "edit", icon: Edit },
     { name: "copy", icon: Copy },
   ],
-  "Development & Tech": [
+  "开发与技术": [
     { name: "bot", icon: Bot },
     { name: "brain", icon: Brain },
     { name: "code", icon: Code },
@@ -210,7 +210,7 @@ const ICON_CATEGORIES = {
     { name: "bug", icon: Bug },
     { name: "coffee", icon: Coffee },
   ],
-  "Business & Finance": [
+  "商业与金融": [
     { name: "briefcase", icon: Briefcase },
     { name: "building", icon: Building },
     { name: "credit-card", icon: CreditCard },
@@ -223,7 +223,7 @@ const ICON_CATEGORIES = {
     { name: "receipt", icon: Receipt },
     { name: "wallet", icon: Wallet },
   ],
-  "Creative & Design": [
+  "创意与设计": [
     { name: "palette", icon: Palette },
     { name: "brush", icon: Brush },
     { name: "camera", icon: Camera },
@@ -238,7 +238,7 @@ const ICON_CATEGORIES = {
     { name: "sparkles", icon: Sparkles },
     { name: "wand-2", icon: Wand2 },
   ],
-  "Nature & Science": [
+  "自然与科学": [
     { name: "beaker", icon: Beaker },
     { name: "atom", icon: Atom },
     { name: "dna", icon: Dna },
@@ -253,7 +253,7 @@ const ICON_CATEGORIES = {
     { name: "waves", icon: Waves },
     { name: "wind", icon: Wind },
   ],
-  "Gaming & Entertainment": [
+  "游戏与娱乐": [
     { name: "gamepad-2", icon: Gamepad2 },
     { name: "dice-1", icon: Dice1 },
     { name: "trophy", icon: Trophy },
@@ -264,7 +264,7 @@ const ICON_CATEGORIES = {
     { name: "swords", icon: Swords },
     { name: "shield", icon: Shield },
   ],
-  "Communication": [
+  "通讯": [
     { name: "mail", icon: Mail },
     { name: "send", icon: Send },
     { name: "message-circle", icon: MessageCircle },
@@ -274,7 +274,7 @@ const ICON_CATEGORIES = {
     { name: "podcast", icon: Podcast },
     { name: "megaphone", icon: Megaphone },
   ],
-  "Miscellaneous": [
+  "其他": [
     { name: "activity", icon: Activity },
     { name: "anchor", icon: Anchor },
     { name: "award", icon: Award },
@@ -322,8 +322,8 @@ interface IconPickerProps {
 }
 
 /**
- * Icon picker component with search and categories
- * Similar to Notion's icon picker interface
+ * 带有搜索和类别的图标选择器组件
+ * 类似于 Notion 的图标选择器界面
  */
 export const IconPicker: React.FC<IconPickerProps> = ({
   value,
@@ -368,7 +368,7 @@ export const IconPicker: React.FC<IconPickerProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[80vh] p-0">
         <DialogHeader className="px-6 py-4 border-b">
-          <DialogTitle>Choose an icon</DialogTitle>
+          <DialogTitle>选择一个图标</DialogTitle>
         </DialogHeader>
 
         {/* Search Bar */}
@@ -376,7 +376,7 @@ export const IconPicker: React.FC<IconPickerProps> = ({
           <div className="relative">
             <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search icons..."
+              placeholder="搜索图标..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -390,7 +390,7 @@ export const IconPicker: React.FC<IconPickerProps> = ({
           {Object.keys(filteredCategories).length === 0 ? (
             <div className="flex flex-col items-center justify-center h-32 text-center">
               <p className="text-sm text-muted-foreground">
-                No icons found for "{searchQuery}"
+                没有找到与 "{searchQuery}" 匹配的图标
               </p>
             </div>
           ) : (
@@ -444,7 +444,7 @@ export const IconPicker: React.FC<IconPickerProps> = ({
         {/* Footer */}
         <div className="px-6 py-3 border-t bg-muted/50">
           <p className="text-xs text-muted-foreground text-center">
-            Click an icon to select • {allIcons.length} icons available
+            点击图标选择 • {allIcons.length} 个图标可用
           </p>
         </div>
       </DialogContent>

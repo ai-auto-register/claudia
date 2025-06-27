@@ -39,7 +39,7 @@ pub fn find_claude_binary(app_handle: &tauri::AppHandle) -> Result<String, Strin
                     if path_buf.exists() && path_buf.is_file() {
                         return Ok(stored_path);
                     } else {
-                        warn!("Stored claude path no longer exists: {}", stored_path);
+                        warn!("存储的 Claude 路径不再存在: {}", stored_path);
                     }
                 }
             }
@@ -51,7 +51,7 @@ pub fn find_claude_binary(app_handle: &tauri::AppHandle) -> Result<String, Strin
 
     if installations.is_empty() {
         error!("Could not find claude binary in any location");
-        return Err("Claude Code not found. Please ensure it's installed in one of these locations: PATH, /usr/local/bin, /opt/homebrew/bin, ~/.nvm/versions/node/*/bin, ~/.claude/local, ~/.local/bin".to_string());
+        return Err("未找到 Claude Code。请确保它已安装在以下位置之一：PATH, /usr/local/bin, /opt/homebrew/bin, ~/.nvm/versions/node/*/bin, ~/.claude/local, ~/.local/bin".to_string());
     }
 
     // Log all found installations
@@ -67,7 +67,7 @@ pub fn find_claude_binary(app_handle: &tauri::AppHandle) -> Result<String, Strin
         );
         Ok(best.path)
     } else {
-        Err("No valid Claude installation found".to_string())
+        Err("未找到有效的 Claude 安装".to_string())
     }
 }
 

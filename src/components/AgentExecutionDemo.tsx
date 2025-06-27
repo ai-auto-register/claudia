@@ -3,12 +3,12 @@ import { StreamMessage } from "./StreamMessage";
 import type { ClaudeStreamMessage } from "./AgentExecution";
 
 /**
- * Demo component showing all the different message types and tools
+ * 演示组件，展示所有不同的消息类型和工具
  */
 export const AgentExecutionDemo: React.FC = () => {
-  // Sample messages based on the provided JSONL session
+  // 基于提供的JSONL会话的示例消息
   const messages: ClaudeStreamMessage[] = [
-    // Skip meta message (should not render)
+    // 跳过元消息（不应渲染）
     {
       type: "user",
       isMeta: true,
@@ -16,14 +16,14 @@ export const AgentExecutionDemo: React.FC = () => {
       timestamp: "2025-06-11T14:08:53.771Z"
     },
     
-    // Summary message
+    // 摘要消息
     {
       leafUuid: "3c5ecb4f-c1f0-40c2-a357-ab7642ad28b8",
-      summary: "JSONL Viewer Model Configuration and Setup",
+      summary: "JSONL查看器模型配置与设置",
       type: "summary" as any
     },
     
-    // Assistant with Edit tool
+    // 助手使用编辑工具
     {
       type: "assistant",
       message: {
@@ -40,13 +40,13 @@ export const AgentExecutionDemo: React.FC = () => {
       }
     },
     
-    // User with Edit tool result
+    // 用户的编辑工具结果
     {
       type: "user",
       message: {
         content: [{
           type: "tool_result",
-          content: `The file /Users/mufeedvh/dev/jsonl-viewer/script.js has been updated. Here's the result of running \`cat -n\` on a snippet of the edited file:
+          content: `文件 /Users/mufeedvh/dev/jsonl-viewer/script.js 已更新。以下是运行 \`cat -n\` 命令查看编辑后文件片段的结果：
    220       readFileAsText(file) {
    221         return new Promise((resolve, reject) => {
    222           const reader = new FileReader();
@@ -60,7 +60,7 @@ export const AgentExecutionDemo: React.FC = () => {
       }
     },
     
-    // Assistant with MCP tool
+    // 助手使用MCP工具
     {
       type: "assistant",
       message: {
@@ -73,7 +73,7 @@ export const AgentExecutionDemo: React.FC = () => {
       }
     },
     
-    // User with empty tool result
+    // 用户的空工具结果
     {
       type: "user",
       message: {
@@ -84,7 +84,7 @@ export const AgentExecutionDemo: React.FC = () => {
       }
     },
     
-    // Assistant with Write tool (large content)
+    // 助手使用写入工具（大内容）
     {
       type: "assistant",
       message: {
@@ -93,7 +93,7 @@ export const AgentExecutionDemo: React.FC = () => {
           name: "Write",
           input: {
             file_path: "/Users/mufeedvh/dev/jsonl-viewer/styles.css",
-            content: `/* Reset and Base Styles */
+            content: `/* 重置和基础样式 */
 * {
     margin: 0;
     padding: 0;
@@ -108,14 +108,14 @@ body {
     min-height: 100vh;
 }
 
-/* Container */
+/* 容器 */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-/* Header */
+/* 头部 */
 .header {
     text-align: center;
     margin-bottom: 40px;
@@ -133,14 +133,14 @@ body {
     font-size: 1.1rem;
 }
 
-/* Input Section */
+/* 输入区域 */
 .input-section {
     display: grid;
     gap: 20px;
     margin-bottom: 30px;
 }
 
-/* Drop Zone */
+/* 拖放区域 */
 .drop-zone {
     border: 2px dashed #cbd5e0;
     border-radius: 12px;
@@ -160,9 +160,9 @@ body {
     box-shadow: 0 8px 25px rgba(66, 153, 225, 0.1);
 }
 
-/* ... many more lines of CSS ... */
-/* This content is over 1000 characters so it should show the maximize button */
-` + '\n'.repeat(100) + '/* End of very long CSS file */'
+/* ... 更多CSS行 ... */
+/* 此内容超过1000个字符，因此应显示最大化按钮 */
+` + '\n'.repeat(100) + '/* 非常长的CSS文件结束 */'
           }
         }]
       }
@@ -171,11 +171,11 @@ body {
 
   return (
     <div className="max-w-4xl mx-auto p-8 space-y-4">
-      <h1 className="text-2xl font-bold mb-6">Agent Execution Demo</h1>
+      <h1 className="text-2xl font-bold mb-6">代理执行演示</h1>
       
       {messages.map((message, idx) => (
         <StreamMessage key={idx} message={message} streamMessages={messages} />
       ))}
     </div>
   );
-}; 
+};

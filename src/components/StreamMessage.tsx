@@ -405,7 +405,7 @@ const StreamMessageComponent: React.FC<StreamMessageProps> = ({ message, classNa
                         <div key={idx} className="space-y-2">
                           <div className="flex items-center gap-2">
                             <CheckCircle2 className="h-4 w-4 text-green-500" />
-                            <span className="text-sm font-medium">Tool Result</span>
+                            <span className="text-sm font-medium">工具结果</span>
                           </div>
                           
                           {beforeReminder && (
@@ -440,7 +440,7 @@ const StreamMessageComponent: React.FC<StreamMessageProps> = ({ message, classNa
                         <div key={idx} className="space-y-2">
                           <div className="flex items-center gap-2">
                             <CheckCircle2 className="h-4 w-4 text-green-500" />
-                            <span className="text-sm font-medium">Edit Result</span>
+                            <span className="text-sm font-medium">编辑结果</span>
                           </div>
                           <EditResultWidget content={contentText} />
                         </div>
@@ -458,7 +458,7 @@ const StreamMessageComponent: React.FC<StreamMessageProps> = ({ message, classNa
                         <div key={idx} className="space-y-2">
                           <div className="flex items-center gap-2">
                             <CheckCircle2 className="h-4 w-4 text-green-500" />
-                            <span className="text-sm font-medium">MultiEdit Result</span>
+                            <span className="text-sm font-medium">MultiEdit 结果</span>
                           </div>
                           <MultiEditResultWidget content={contentText} />
                         </div>
@@ -508,7 +508,7 @@ const StreamMessageComponent: React.FC<StreamMessageProps> = ({ message, classNa
                         <div key={idx} className="space-y-2">
                           <div className="flex items-center gap-2">
                             <CheckCircle2 className="h-4 w-4 text-green-500" />
-                            <span className="text-sm font-medium">Directory Contents</span>
+                            <span className="text-sm font-medium">目录内容</span>
                           </div>
                           <LSResultWidget content={contentText} />
                         </div>
@@ -547,7 +547,7 @@ const StreamMessageComponent: React.FC<StreamMessageProps> = ({ message, classNa
                         <div key={idx} className="space-y-2">
                           <div className="flex items-center gap-2">
                             <CheckCircle2 className="h-4 w-4 text-green-500" />
-                            <span className="text-sm font-medium">Read Result</span>
+                            <span className="text-sm font-medium">读取结果</span>
                           </div>
                           <ReadResultWidget content={contentText} filePath={filePath} />
                         </div>
@@ -557,17 +557,17 @@ const StreamMessageComponent: React.FC<StreamMessageProps> = ({ message, classNa
                     // Handle empty tool results
                     if (!contentText || contentText.trim() === '') {
                       renderedSomething = true;
-                      return (
-                        <div key={idx} className="space-y-2">
-                          <div className="flex items-center gap-2">
-                            <CheckCircle2 className="h-4 w-4 text-green-500" />
-                            <span className="text-sm font-medium">Tool Result</span>
-                          </div>
-                          <div className="ml-6 p-3 bg-muted/50 rounded-md border text-sm text-muted-foreground italic">
-                            Tool did not return any output
-                          </div>
+                    return (
+                      <div key={idx} className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="h-4 w-4 text-green-500" />
+                          <span className="text-sm font-medium">工具结果</span>
                         </div>
-                      );
+                        <div className="ml-6 p-3 bg-muted/50 rounded-md border text-sm text-muted-foreground italic">
+                          工具未返回任何输出
+                        </div>
+                      </div>
+                    );
                     }
                     
                     renderedSomething = true;

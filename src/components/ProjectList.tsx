@@ -76,7 +76,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({
                     <p className="text-sm truncate">{project.path}</p>
                     <div className="flex items-center space-x-3 text-xs text-muted-foreground">
                       <span>
-                        {project.sessions.length} session{project.sessions.length !== 1 ? 's' : ''}
+                        {project.sessions.length} 个会话
                       </span>
                       <div className="flex items-center space-x-1">
                         <Clock className="h-3 w-3" />

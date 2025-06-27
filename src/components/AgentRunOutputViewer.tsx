@@ -30,26 +30,26 @@ import type { ClaudeStreamMessage } from './AgentExecution';
 
 interface AgentRunOutputViewerProps {
   /**
-   * The agent run to display
+   * 要显示的代理运行
    */
   run: AgentRunWithMetrics;
   /**
-   * Callback when the viewer is closed
+   * 查看器关闭时的回调
    */
   onClose: () => void;
   /**
-   * Optional callback to open full view
+   * 打开完整视图的可选回调
    */
   onOpenFullView?: () => void;
   /**
-   * Optional className for styling
+   * 可选的样式类名
    */
   className?: string;
 }
 
 /**
- * AgentRunOutputViewer - Modal component for viewing agent execution output
- * 
+ * AgentRunOutputViewer - 用于查看代理执行输出的模态组件
+ *
  * @example
  * <AgentRunOutputViewer
  *   run={agentRun}
@@ -78,7 +78,7 @@ export function AgentRunOutputViewer({
   const unlistenRefs = useRef<UnlistenFn[]>([]);
   const { getCachedOutput, setCachedOutput } = useOutputCache();
 
-  // Auto-scroll logic
+  // 自动滚动逻辑
   const isAtBottom = () => {
     const container = isFullscreen ? fullscreenScrollRef.current : scrollAreaRef.current;
     if (container) {
@@ -98,14 +98,14 @@ export function AgentRunOutputViewer({
     }
   };
 
-  // Clean up listeners on unmount
+  // 在组件卸载时清理监听器
   useEffect(() => {
     return () => {
       unlistenRefs.current.forEach(unlisten => unlisten());
     };
   }, []);
 
-  // Auto-scroll when messages change
+  // 当消息变化时自动滚动
   useEffect(() => {
     const shouldAutoScroll = !hasUserScrolled || isAtBottom();
     if (shouldAutoScroll) {
@@ -117,14 +117,14 @@ export function AgentRunOutputViewer({
     if (!run.id) return;
 
     try {
-      // Check cache first if not skipping cache
+      // 如果不跳过缓存，先检查缓存
       if (!skipCache) {
         const cached = getCachedOutput(run.id);
         if (cached) {
           const cachedJsonlLines = cached.output.split('\n').filter(line => line.trim());
           setRawJsonlOutput(cachedJsonlLines);
           setMessages(cached.messages);
-          // If cache is recent (less than 5 seconds old) and session isn't running, use cache only
+          // 如果缓存较新（不到5秒）且会话未运行，仅使用缓存
           if (Date.now() - cached.lastUpdated < 5000 && run.status !== 'running') {
             return;
           }
@@ -134,7 +134,7 @@ export function AgentRunOutputViewer({
       setLoading(true);
       const rawOutput = await api.getSessionOutput(run.id);
       
-      // Parse JSONL output into messages
+      // 将JSONL输出解析为消息
       const jsonlLines = rawOutput.split('\n').filter(line => line.trim());
       setRawJsonlOutput(jsonlLines);
       
@@ -144,12 +144,12 @@ export function AgentRunOutputViewer({
           const message = JSON.parse(line) as ClaudeStreamMessage;
           parsedMessages.push(message);
         } catch (err) {
-          console.error("Failed to parse message:", err, line);
+          console.error("解析消息失败:", err, line);
         }
       }
       setMessages(parsedMessages);
       
-      // Update cache
+      // 更新缓存
       setCachedOutput(run.id, {
         output: rawOutput,
         messages: parsedMessages,
@@ -157,19 +157,19 @@ export function AgentRunOutputViewer({
         status: run.status
       });
       
-      // Set up live event listeners for running sessions
+      // 为正在运行的会话设置实时事件监听器
       if (run.status === 'running') {
         setupLiveEventListeners();
         
         try {
           await api.streamSessionOutput(run.id);
         } catch (streamError) {
-          console.warn('Failed to start streaming, will poll instead:', streamError);
+          console.warn('启动流式传输失败，将改用轮询:', streamError);
         }
       }
     } catch (error) {
-      console.error('Failed to load agent output:', error);
-      setToast({ message: 'Failed to load agent output', type: 'error' });
+      console.error('加载代理输出失败:', error);
+      setToast({ message: '加载代理输出失败', type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -179,111 +179,111 @@ export function AgentRunOutputViewer({
     if (!run.id) return;
     
     try {
-      // Clean up existing listeners
+      // 清理现有监听器
       unlistenRefs.current.forEach(unlisten => unlisten());
       unlistenRefs.current = [];
 
-      // Set up live event listeners with run ID isolation
+      // 设置带有运行ID隔离的实时事件监听器
       const outputUnlisten = await listen<string>(`agent-output:${run.id}`, (event) => {
         try {
-          // Store raw JSONL
+          // 存储原始JSONL
           setRawJsonlOutput(prev => [...prev, event.payload]);
           
-          // Parse and display
+          // 解析并显示
           const message = JSON.parse(event.payload) as ClaudeStreamMessage;
           setMessages(prev => [...prev, message]);
         } catch (err) {
-          console.error("Failed to parse message:", err, event.payload);
+          console.error("解析消息失败:", err, event.payload);
         }
       });
 
       const errorUnlisten = await listen<string>(`agent-error:${run.id}`, (event) => {
-        console.error("Agent error:", event.payload);
+        console.error("代理错误:", event.payload);
         setToast({ message: event.payload, type: 'error' });
       });
 
       const completeUnlisten = await listen<boolean>(`agent-complete:${run.id}`, () => {
-        setToast({ message: 'Agent execution completed', type: 'success' });
+        setToast({ message: '代理执行已完成', type: 'success' });
       });
 
       const cancelUnlisten = await listen<boolean>(`agent-cancelled:${run.id}`, () => {
-        setToast({ message: 'Agent execution was cancelled', type: 'error' });
+        setToast({ message: '代理执行已取消', type: 'error' });
       });
 
       unlistenRefs.current = [outputUnlisten, errorUnlisten, completeUnlisten, cancelUnlisten];
     } catch (error) {
-      console.error('Failed to set up live event listeners:', error);
+      console.error('设置实时事件监听器失败:', error);
     }
   };
 
-  // Copy functionality
+  // 复制功能
   const handleCopyAsJsonl = async () => {
     const jsonl = rawJsonlOutput.join('\n');
     await navigator.clipboard.writeText(jsonl);
     setCopyPopoverOpen(false);
-    setToast({ message: 'Output copied as JSONL', type: 'success' });
+    setToast({ message: '输出已复制为JSONL格式', type: 'success' });
   };
 
   const handleCopyAsMarkdown = async () => {
-    let markdown = `# Agent Execution: ${run.agent_name}\n\n`;
-    markdown += `**Task:** ${run.task}\n`;
-    markdown += `**Model:** ${run.model === 'opus' ? 'Claude 4 Opus' : 'Claude 4 Sonnet'}\n`;
-    markdown += `**Date:** ${formatISOTimestamp(run.created_at)}\n`;
-    if (run.metrics?.duration_ms) markdown += `**Duration:** ${(run.metrics.duration_ms / 1000).toFixed(2)}s\n`;
-    if (run.metrics?.total_tokens) markdown += `**Total Tokens:** ${run.metrics.total_tokens}\n`;
-    if (run.metrics?.cost_usd) markdown += `**Cost:** $${run.metrics.cost_usd.toFixed(4)} USD\n`;
+    let markdown = `# 代理执行: ${run.agent_name}\n\n`;
+    markdown += `**任务:** ${run.task}\n`;
+    markdown += `**模型:** ${run.model === 'opus' ? 'Claude 4 Opus' : 'Claude 4 Sonnet'}\n`;
+    markdown += `**日期:** ${formatISOTimestamp(run.created_at)}\n`;
+    if (run.metrics?.duration_ms) markdown += `**持续时间:** ${(run.metrics.duration_ms / 1000).toFixed(2)}秒\n`;
+    if (run.metrics?.total_tokens) markdown += `**总令牌数:** ${run.metrics.total_tokens}\n`;
+    if (run.metrics?.cost_usd) markdown += `**成本:** $${run.metrics.cost_usd.toFixed(4)} 美元\n`;
     markdown += `\n---\n\n`;
 
     for (const msg of messages) {
       if (msg.type === "system" && msg.subtype === "init") {
-        markdown += `## System Initialization\n\n`;
-        markdown += `- Session ID: \`${msg.session_id || 'N/A'}\`\n`;
-        markdown += `- Model: \`${msg.model || 'default'}\`\n`;
-        if (msg.cwd) markdown += `- Working Directory: \`${msg.cwd}\`\n`;
-        if (msg.tools?.length) markdown += `- Tools: ${msg.tools.join(', ')}\n`;
+        markdown += `## 系统初始化\n\n`;
+        markdown += `- 会话ID: \`${msg.session_id || '无'}\`\n`;
+        markdown += `- 模型: \`${msg.model || '默认'}\`\n`;
+        if (msg.cwd) markdown += `- 工作目录: \`${msg.cwd}\`\n`;
+        if (msg.tools?.length) markdown += `- 工具: ${msg.tools.join(', ')}\n`;
         markdown += `\n`;
       } else if (msg.type === "assistant" && msg.message) {
-        markdown += `## Assistant\n\n`;
+        markdown += `## 助手\n\n`;
         for (const content of msg.message.content || []) {
           if (content.type === "text") {
             markdown += `${content.text}\n\n`;
           } else if (content.type === "tool_use") {
-            markdown += `### Tool: ${content.name}\n\n`;
+            markdown += `### 工具: ${content.name}\n\n`;
             markdown += `\`\`\`json\n${JSON.stringify(content.input, null, 2)}\n\`\`\`\n\n`;
           }
         }
         if (msg.message.usage) {
-          markdown += `*Tokens: ${msg.message.usage.input_tokens} in, ${msg.message.usage.output_tokens} out*\n\n`;
+          markdown += `*令牌数: ${msg.message.usage.input_tokens} 输入, ${msg.message.usage.output_tokens} 输出*\n\n`;
         }
       } else if (msg.type === "user" && msg.message) {
-        markdown += `## User\n\n`;
+        markdown += `## 用户\n\n`;
         for (const content of msg.message.content || []) {
           if (content.type === "text") {
             markdown += `${content.text}\n\n`;
           } else if (content.type === "tool_result") {
-            markdown += `### Tool Result\n\n`;
+            markdown += `### 工具结果\n\n`;
             markdown += `\`\`\`\n${content.content}\n\`\`\`\n\n`;
           }
         }
       } else if (msg.type === "result") {
-        markdown += `## Execution Result\n\n`;
+        markdown += `## 执行结果\n\n`;
         if (msg.result) {
           markdown += `${msg.result}\n\n`;
         }
         if (msg.error) {
-          markdown += `**Error:** ${msg.error}\n\n`;
+          markdown += `**错误:** ${msg.error}\n\n`;
         }
       }
     }
 
     await navigator.clipboard.writeText(markdown);
     setCopyPopoverOpen(false);
-    setToast({ message: 'Output copied as Markdown', type: 'success' });
+    setToast({ message: '输出已复制为Markdown格式', type: 'success' });
   };
 
   const refreshOutput = async () => {
     setRefreshing(true);
-    await loadOutput(true); // Skip cache
+    await loadOutput(true); // 跳过缓存
     setRefreshing(false);
   };
 
@@ -325,7 +325,7 @@ export function AgentRunOutputViewer({
           for (const content of msg.content) {
             if (content.type === "text") { hasVisibleContent = true; break; }
             if (content.type === "tool_result") {
-              // Check if this tool result will be displayed as a widget
+              // 检查此工具结果是否将显示为小部件
               let willBeSkipped = false;
               if (content.tool_use_id) {
                 // Find the corresponding tool use
@@ -360,12 +360,12 @@ export function AgentRunOutputViewer({
   };
 
   const formatDuration = (ms?: number) => {
-    if (!ms) return "N/A";
+    if (!ms) return "无";
     const seconds = Math.floor(ms / 1000);
-    if (seconds < 60) return `${seconds}s`;
+    if (seconds < 60) return `${seconds}秒`;
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}m ${remainingSeconds}s`;
+    return `${minutes}分 ${remainingSeconds}秒`;
   };
 
   const formatTokens = (tokens?: number) => {
@@ -405,7 +405,7 @@ export function AgentRunOutputViewer({
                     {run.status === 'running' && (
                       <div className="flex items-center gap-1">
                         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span className="text-xs text-green-600 font-medium">Running</span>
+                        <span className="text-xs text-green-600 font-medium">运行中</span>
                       </div>
                     )}
                   </CardTitle>
@@ -447,7 +447,7 @@ export function AgentRunOutputViewer({
                       className="h-8 px-2"
                     >
                       <Copy className="h-4 w-4 mr-1" />
-                      Copy
+                      复制
                       <ChevronDown className="h-3 w-3 ml-1" />
                     </Button>
                   }
@@ -459,7 +459,7 @@ export function AgentRunOutputViewer({
                         className="w-full justify-start"
                         onClick={handleCopyAsJsonl}
                       >
-                        Copy as JSONL
+                        复制为JSONL
                       </Button>
                       <Button
                         variant="ghost"
@@ -467,7 +467,7 @@ export function AgentRunOutputViewer({
                         className="w-full justify-start"
                         onClick={handleCopyAsMarkdown}
                       >
-                        Copy as Markdown
+                        复制为Markdown
                       </Button>
                     </div>
                   }
@@ -480,7 +480,7 @@ export function AgentRunOutputViewer({
                     variant="ghost"
                     size="sm"
                     onClick={onOpenFullView}
-                    title="Open in full view"
+                    title="在完整视图中打开"
                     className="h-8 px-2"
                   >
                     <ExternalLink className="h-4 w-4" />
@@ -490,7 +490,7 @@ export function AgentRunOutputViewer({
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsFullscreen(!isFullscreen)}
-                  title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                  title={isFullscreen ? "退出全屏" : "进入全屏"}
                   className="h-8 px-2"
                 >
                   {isFullscreen ? (
@@ -504,7 +504,7 @@ export function AgentRunOutputViewer({
                   size="sm"
                   onClick={refreshOutput}
                   disabled={refreshing}
-                  title="Refresh output"
+                  title="刷新输出"
                   className="h-8 px-2"
                 >
                   <RotateCcw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
@@ -525,12 +525,12 @@ export function AgentRunOutputViewer({
               <div className="flex items-center justify-center h-full">
                 <div className="flex items-center space-x-2">
                   <RefreshCw className="h-4 w-4 animate-spin" />
-                  <span>Loading output...</span>
+                  <span>正在加载输出...</span>
                 </div>
               </div>
             ) : messages.length === 0 ? (
               <div className="flex items-center justify-center h-full text-muted-foreground">
-                <p>No output available yet</p>
+                <p>暂无可用输出</p>
               </div>
             ) : (
               <div 
@@ -578,7 +578,7 @@ export function AgentRunOutputViewer({
                     size="sm"
                   >
                     <Copy className="h-4 w-4 mr-2" />
-                    Copy Output
+                    复制输出
                     <ChevronDown className="h-3 w-3 ml-2" />
                   </Button>
                 }
@@ -590,7 +590,7 @@ export function AgentRunOutputViewer({
                       className="w-full justify-start"
                       onClick={handleCopyAsJsonl}
                     >
-                      Copy as JSONL
+                      复制为JSONL
                     </Button>
                     <Button
                       variant="ghost"
@@ -598,7 +598,7 @@ export function AgentRunOutputViewer({
                       className="w-full justify-start"
                       onClick={handleCopyAsMarkdown}
                     >
-                      Copy as Markdown
+                      复制为Markdown
                     </Button>
                   </div>
                 }
@@ -618,7 +618,7 @@ export function AgentRunOutputViewer({
                 onClick={() => setIsFullscreen(false)}
               >
                 <Minimize2 className="h-4 w-4 mr-2" />
-                Exit Fullscreen
+                退出全屏
               </Button>
             </div>
           </div>
@@ -630,7 +630,7 @@ export function AgentRunOutputViewer({
             <div className="max-w-4xl mx-auto space-y-2">
               {messages.length === 0 ? (
                 <div className="text-center text-muted-foreground py-8">
-                  No output available yet
+                  暂无可用输出
                 </div>
               ) : (
                 <>

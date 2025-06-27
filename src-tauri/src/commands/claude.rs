@@ -981,7 +981,7 @@ fn should_use_sandbox(app: &AppHandle) -> Result<bool, String> {
 
 /// Helper function to create a sandboxed Claude command
 fn create_sandboxed_claude_command(app: &AppHandle, project_path: &str) -> Result<Command, String> {
-    use crate::sandbox::{executor::create_sandboxed_command, profile::ProfileBuilder};
+    use crate::sandbox::profile::ProfileBuilder;
     use std::path::PathBuf;
 
     // Get the database connection
@@ -1091,13 +1091,16 @@ fn create_sandboxed_claude_command(app: &AppHandle, project_path: &str) -> Resul
                             // Use the helper function to create sandboxed command
                             let claude_path = find_claude_binary(app)?;
                             #[cfg(unix)]
-                            return Ok(create_sandboxed_command(
-                                &claude_path,
-                                &[],
-                                &project_path_buf,
-                                profile,
-                                project_path_buf.clone(),
-                            ));
+                            {
+                                use crate::sandbox::executor::create_sandboxed_command;
+                                return Ok(create_sandboxed_command(
+                                    &claude_path,
+                                    &[],
+                                    &project_path_buf,
+                                    profile,
+                                    project_path_buf.clone(),
+                                ));
+                            }
 
                             #[cfg(not(unix))]
                             {
@@ -1500,7 +1503,7 @@ pub async fn create_checkpoint(
 
     if session_path.exists() {
         let file = fs::File::open(&session_path)
-            .map_err(|e| format!("Failed to open session file: {}", e))?;
+            .map_err(|e| format!("无法打开会话文件: {}", e))?;
         let reader = BufReader::new(file);
 
         let mut line_count = 0;
@@ -1514,7 +1517,7 @@ pub async fn create_checkpoint(
                 manager
                     .track_message(line)
                     .await
-                    .map_err(|e| format!("Failed to track message: {}", e))?;
+                    .map_err(|e| format!("无法跟踪消息: {}", e))?;
             }
             line_count += 1;
         }
@@ -1523,7 +1526,7 @@ pub async fn create_checkpoint(
     manager
         .create_checkpoint(description, None)
         .await
-        .map_err(|e| format!("Failed to create checkpoint: {}", e))
+        .map_err(|e| format!("无法创建检查点: {}", e))
 }
 
 /// Restores a session to a specific checkpoint
@@ -1548,12 +1551,12 @@ pub async fn restore_checkpoint(
             PathBuf::from(&project_path),
         )
         .await
-        .map_err(|e| format!("Failed to get checkpoint manager: {}", e))?;
+        .map_err(|e| format!("无法获取检查点管理器: {}", e))?;
 
     let result = manager
         .restore_checkpoint(&checkpoint_id)
         .await
-        .map_err(|e| format!("Failed to restore checkpoint: {}", e))?;
+        .map_err(|e| format!("无法恢复检查点: {}", e))?;
 
     // Update the session JSONL file with restored messages
     let claude_dir = get_claude_dir().map_err(|e| e.to_string())?;
@@ -1567,10 +1570,10 @@ pub async fn restore_checkpoint(
     let (_, _, messages) = manager
         .storage
         .load_checkpoint(&result.checkpoint.project_id, &session_id, &checkpoint_id)
-        .map_err(|e| format!("Failed to load checkpoint data: {}", e))?;
+        .map_err(|e| format!("无法加载检查点数据: {}", e))?;
 
     fs::write(&session_path, messages)
-        .map_err(|e| format!("Failed to update session file: {}", e))?;
+        .map_err(|e| format!("无法更新会话文件: {}", e))?;
 
     Ok(result)
 }
@@ -1592,7 +1595,7 @@ pub async fn list_checkpoints(
     let manager = app
         .get_or_create_manager(session_id, project_id, PathBuf::from(&project_path))
         .await
-        .map_err(|e| format!("Failed to get checkpoint manager: {}", e))?;
+        .map_err(|e| format!("无法获取检查点管理器: {}", e))?;
 
     Ok(manager.list_checkpoints().await)
 }
@@ -1628,7 +1631,7 @@ pub async fn fork_from_checkpoint(
 
     if source_session_path.exists() {
         fs::copy(&source_session_path, &new_session_path)
-            .map_err(|e| format!("Failed to copy session file: {}", e))?;
+            .map_err(|e| format!("无法复制会话文件: {}", e))?;
     }
 
     // Create manager for the new session
@@ -1639,12 +1642,12 @@ pub async fn fork_from_checkpoint(
             PathBuf::from(&project_path),
         )
         .await
-        .map_err(|e| format!("Failed to get checkpoint manager: {}", e))?;
+        .map_err(|e| format!("无法获取检查点管理器: {}", e))?;
 
     manager
         .fork_from_checkpoint(&checkpoint_id, description)
         .await
-        .map_err(|e| format!("Failed to fork checkpoint: {}", e))
+        .map_err(|e| format!("无法分支检查点: {}", e))
 }
 
 /// Gets the timeline for a session
@@ -1664,7 +1667,7 @@ pub async fn get_session_timeline(
     let manager = app
         .get_or_create_manager(session_id, project_id, PathBuf::from(&project_path))
         .await
-        .map_err(|e| format!("Failed to get checkpoint manager: {}", e))?;
+        .map_err(|e| format!("无法获取检查点管理器: {}", e))?;
 
     Ok(manager.get_timeline().await)
 }
@@ -1690,7 +1693,7 @@ pub async fn update_checkpoint_settings(
         "smart" => CheckpointStrategy::Smart,
         _ => {
             return Err(format!(
-                "Invalid checkpoint strategy: {}",
+                "无效的检查点策略: {}",
                 checkpoint_strategy
             ))
         }
@@ -1699,12 +1702,12 @@ pub async fn update_checkpoint_settings(
     let manager = app
         .get_or_create_manager(session_id, project_id, PathBuf::from(&project_path))
         .await
-        .map_err(|e| format!("Failed to get checkpoint manager: {}", e))?;
+        .map_err(|e| format!("无法获取检查点管理器: {}", e))?;
 
     manager
         .update_settings(auto_checkpoint_enabled, strategy)
         .await
-        .map_err(|e| format!("Failed to update settings: {}", e))
+        .map_err(|e| format!("无法更新设置: {}", e))
 }
 
 /// Gets diff between two checkpoints
@@ -1729,10 +1732,10 @@ pub async fn get_checkpoint_diff(
     // Load both checkpoints
     let (from_checkpoint, from_files, _) = storage
         .load_checkpoint(&project_id, &session_id, &from_checkpoint_id)
-        .map_err(|e| format!("Failed to load source checkpoint: {}", e))?;
+        .map_err(|e| format!("无法加载源检查点: {}", e))?;
     let (to_checkpoint, to_files, _) = storage
         .load_checkpoint(&project_id, &session_id, &to_checkpoint_id)
-        .map_err(|e| format!("Failed to load target checkpoint: {}", e))?;
+        .map_err(|e| format!("无法加载目标检查点: {}", e))?;
 
     // Build file maps
     let mut from_map: std::collections::HashMap<PathBuf, &crate::checkpoint::FileSnapshot> =
@@ -1808,12 +1811,12 @@ pub async fn track_checkpoint_message(
     let manager = app
         .get_or_create_manager(session_id, project_id, PathBuf::from(project_path))
         .await
-        .map_err(|e| format!("Failed to get checkpoint manager: {}", e))?;
+        .map_err(|e| format!("无法获取检查点管理器: {}", e))?;
 
     manager
         .track_message(message)
         .await
-        .map_err(|e| format!("Failed to track message: {}", e))
+        .map_err(|e| format!("无法跟踪消息: {}", e))
 }
 
 /// Checks if auto-checkpoint should be triggered
@@ -1830,7 +1833,7 @@ pub async fn check_auto_checkpoint(
     let manager = app
         .get_or_create_manager(session_id.clone(), project_id, PathBuf::from(project_path))
         .await
-        .map_err(|e| format!("Failed to get checkpoint manager: {}", e))?;
+        .map_err(|e| format!("无法获取检查点管理器: {}", e))?;
 
     Ok(manager.should_auto_checkpoint(&message).await)
 }
@@ -1857,12 +1860,12 @@ pub async fn cleanup_old_checkpoints(
             PathBuf::from(project_path),
         )
         .await
-        .map_err(|e| format!("Failed to get checkpoint manager: {}", e))?;
+        .map_err(|e| format!("无法获取检查点管理器: {}", e))?;
 
     manager
         .storage
         .cleanup_old_checkpoints(&project_id, &session_id, keep_count)
-        .map_err(|e| format!("Failed to cleanup checkpoints: {}", e))
+        .map_err(|e| format!("无法清理检查点: {}", e))
 }
 
 /// Gets checkpoint settings for a session
@@ -1878,7 +1881,7 @@ pub async fn get_checkpoint_settings(
     let manager = app
         .get_or_create_manager(session_id, project_id, PathBuf::from(project_path))
         .await
-        .map_err(|e| format!("Failed to get checkpoint manager: {}", e))?;
+        .map_err(|e| format!("无法获取检查点管理器: {}", e))?;
 
     let timeline = manager.get_timeline().await;
 
@@ -1936,7 +1939,7 @@ pub async fn get_recently_modified_files(
     let manager = app
         .get_or_create_manager(session_id, project_id, PathBuf::from(project_path))
         .await
-        .map_err(|e| format!("Failed to get checkpoint manager: {}", e))?;
+        .map_err(|e| format!("无法获取检查点管理器: {}", e))?;
 
     let since = Utc::now() - Duration::minutes(minutes);
     let modified_files = manager.get_files_modified_since(since).await;

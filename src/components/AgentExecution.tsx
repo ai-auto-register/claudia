@@ -28,15 +28,15 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 
 interface AgentExecutionProps {
   /**
-   * The agent to execute
+   * 要执行的代理
    */
   agent: Agent;
   /**
-   * Callback to go back to the agents list
+   * 返回代理列表的回调函数
    */
   onBack: () => void;
   /**
-   * Optional className for styling
+   * 可选的样式类名
    */
   className?: string;
 }
@@ -59,8 +59,8 @@ export interface ClaudeStreamMessage {
 }
 
 /**
- * AgentExecution component for running CC agents
- * 
+ * 用于运行 CC 代理的 AgentExecution 组件
+ *
  * @example
  * <AgentExecution agent={agent} onBack={() => setView('list')} />
  */
@@ -250,7 +250,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
       const selected = await open({
         directory: true,
         multiple: false,
-        title: "Select Project Directory"
+        title: "选择项目目录"
       });
       
       if (selected) {
@@ -258,10 +258,10 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
         setError(null); // Clear any previous errors
       }
     } catch (err) {
-      console.error("Failed to select directory:", err);
-      // More detailed error logging
+      console.error("选择目录失败:", err);
+      // 更详细的错误日志
       const errorMessage = err instanceof Error ? err.message : String(err);
-      setError(`Failed to select directory: ${errorMessage}`);
+      setError(`选择目录失败: ${errorMessage}`);
     }
   };
 
@@ -305,20 +305,20 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
         setIsRunning(false);
         setExecutionStartTime(null);
         if (!event.payload) {
-          setError("Agent execution failed");
+          setError("代理执行失败");
         }
       });
 
       const cancelUnlisten = await listen<boolean>(`agent-cancelled:${runId}`, () => {
         setIsRunning(false);
         setExecutionStartTime(null);
-        setError("Agent execution was cancelled");
+        setError("代理执行已取消");
       });
 
       unlistenRefs.current = [outputUnlisten, errorUnlisten, completeUnlisten, cancelUnlisten];
     } catch (err) {
       console.error("Failed to execute agent:", err);
-      setError("Failed to execute agent");
+      setError("执行代理失败");
       setIsRunning(false);
       setExecutionStartTime(null);
     }
@@ -340,7 +340,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
         type: "result",
         subtype: "error",
         is_error: true,
-        result: "Execution stopped by user",
+        result: "执行已被用户停止",
         duration_ms: elapsedTime * 1000,
         usage: {
           input_tokens: totalTokens,
@@ -348,7 +348,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
         }
       }]);
     } catch (err) {
-      console.error("Failed to stop agent:", err);
+      console.error("停止代理失败:", err);
     }
   };
 
@@ -356,7 +356,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
     if (isRunning) {
       // Show confirmation dialog before navigating away during execution
       const shouldLeave = window.confirm(
-        "An agent is currently running. If you navigate away, the agent will continue running in the background. You can view running sessions in the 'Running Sessions' tab within CC Agents.\n\nDo you want to continue?"
+        '代理当前正在运行。如果您离开，代理将在后台继续运行。您可以在 CC 代理的"运行中的会话"标签中查看运行中的会话。\n\n您确定要继续吗？'
       );
       if (!shouldLeave) {
         return;
@@ -378,63 +378,63 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
   };
 
   const handleCopyAsMarkdown = async () => {
-    let markdown = `# Agent Execution: ${agent.name}\n\n`;
-    markdown += `**Task:** ${task}\n`;
-    markdown += `**Model:** ${model === 'opus' ? 'Claude 4 Opus' : 'Claude 4 Sonnet'}\n`;
-    markdown += `**Date:** ${new Date().toISOString()}\n\n`;
+    let markdown = `# 代理执行: ${agent.name}\n\n`;
+    markdown += `**任务:** ${task}\n`;
+    markdown += `**模型:** ${model === 'opus' ? 'Claude 4 Opus' : 'Claude 4 Sonnet'}\n`;
+    markdown += `**日期:** ${new Date().toISOString()}\n\n`;
     markdown += `---\n\n`;
 
     for (const msg of messages) {
       if (msg.type === "system" && msg.subtype === "init") {
-        markdown += `## System Initialization\n\n`;
-        markdown += `- Session ID: \`${msg.session_id || 'N/A'}\`\n`;
-        markdown += `- Model: \`${msg.model || 'default'}\`\n`;
-        if (msg.cwd) markdown += `- Working Directory: \`${msg.cwd}\`\n`;
-        if (msg.tools?.length) markdown += `- Tools: ${msg.tools.join(', ')}\n`;
+        markdown += `## 系统初始化\n\n`;
+        markdown += `- 会话 ID: \`${msg.session_id || '无'}\`\n`;
+        markdown += `- 模型: \`${msg.model || '默认'}\`\n`;
+        if (msg.cwd) markdown += `- 工作目录: \`${msg.cwd}\`\n`;
+        if (msg.tools?.length) markdown += `- 工具: ${msg.tools.join(', ')}\n`;
         markdown += `\n`;
       } else if (msg.type === "assistant" && msg.message) {
-        markdown += `## Assistant\n\n`;
+        markdown += `## 助手\n\n`;
         for (const content of msg.message.content || []) {
           if (content.type === "text") {
             markdown += `${content.text}\n\n`;
           } else if (content.type === "tool_use") {
-            markdown += `### Tool: ${content.name}\n\n`;
+            markdown += `### 工具: ${content.name}\n\n`;
             markdown += `\`\`\`json\n${JSON.stringify(content.input, null, 2)}\n\`\`\`\n\n`;
           }
         }
         if (msg.message.usage) {
-          markdown += `*Tokens: ${msg.message.usage.input_tokens} in, ${msg.message.usage.output_tokens} out*\n\n`;
+          markdown += `*令牌数: 输入 ${msg.message.usage.input_tokens}, 输出 ${msg.message.usage.output_tokens}*\n\n`;
         }
       } else if (msg.type === "user" && msg.message) {
-        markdown += `## User\n\n`;
+        markdown += `## 用户\n\n`;
         for (const content of msg.message.content || []) {
           if (content.type === "text") {
             markdown += `${content.text}\n\n`;
           } else if (content.type === "tool_result") {
-            markdown += `### Tool Result\n\n`;
+            markdown += `### 工具结果\n\n`;
             markdown += `\`\`\`\n${content.content}\n\`\`\`\n\n`;
           }
         }
       } else if (msg.type === "result") {
-        markdown += `## Execution Result\n\n`;
+        markdown += `## 执行结果\n\n`;
         if (msg.result) {
           markdown += `${msg.result}\n\n`;
         }
         if (msg.error) {
-          markdown += `**Error:** ${msg.error}\n\n`;
+          markdown += `**错误:** ${msg.error}\n\n`;
         }
         if (msg.cost_usd !== undefined) {
-          markdown += `- **Cost:** $${msg.cost_usd.toFixed(4)} USD\n`;
+          markdown += `- **成本:** $${msg.cost_usd.toFixed(4)} USD\n`;
         }
         if (msg.duration_ms !== undefined) {
-          markdown += `- **Duration:** ${(msg.duration_ms / 1000).toFixed(2)}s\n`;
+          markdown += `- **持续时间:** ${(msg.duration_ms / 1000).toFixed(2)}秒\n`;
         }
         if (msg.num_turns !== undefined) {
-          markdown += `- **Turns:** ${msg.num_turns}\n`;
+          markdown += `- **回合数:** ${msg.num_turns}\n`;
         }
         if (msg.usage) {
           const total = msg.usage.input_tokens + msg.usage.output_tokens;
-          markdown += `- **Total Tokens:** ${total} (${msg.usage.input_tokens} in, ${msg.usage.output_tokens} out)\n`;
+          markdown += `- **总令牌数:** ${total} (输入 ${msg.usage.input_tokens}, 输出 ${msg.usage.output_tokens})\n`;
         }
       }
     }
@@ -483,7 +483,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                       )}
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      {isRunning ? "Click back to return to main menu - view in CC Agents > Running Sessions" : "Execute CC Agent"}
+                      {isRunning ? "点击返回到主菜单 - 在 CC 代理 > 运行中的会话中查看" : "执行 CC 代理"}
                     </p>
                   </div>
                 </div>
@@ -499,7 +499,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                       className="flex items-center gap-2"
                     >
                       <Maximize2 className="h-4 w-4" />
-                      Fullscreen
+                      全屏
                     </Button>
                     <Popover
                       trigger={
@@ -509,7 +509,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                           className="flex items-center gap-2"
                         >
                           <Copy className="h-4 w-4" />
-                          Copy Output
+                          复制输出
                           <ChevronDown className="h-3 w-3" />
                         </Button>
                       }
@@ -521,7 +521,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                             className="w-full justify-start"
                             onClick={handleCopyAsJsonl}
                           >
-                            Copy as JSONL
+                            复制为 JSONL
                           </Button>
                           <Button
                             variant="ghost"
@@ -529,7 +529,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                             className="w-full justify-start"
                             onClick={handleCopyAsMarkdown}
                           >
-                            Copy as Markdown
+                            复制为 Markdown
                           </Button>
                         </div>
                       }
@@ -566,7 +566,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                 <Input
                   value={projectPath}
                   onChange={(e) => setProjectPath(e.target.value)}
-                  placeholder="Select or enter project path"
+                  placeholder="选择或输入项目路径"
                   disabled={isRunning}
                   className="flex-1"
                 />
@@ -646,7 +646,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                 <Input
                   value={task}
                   onChange={(e) => setTask(e.target.value)}
-                  placeholder="Enter the task for the agent"
+                  placeholder="输入代理的任务"
                   disabled={isRunning}
                   className="flex-1"
                   onKeyPress={(e) => {
@@ -663,12 +663,12 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                   {isRunning ? (
                     <>
                       <StopCircle className="mr-2 h-4 w-4" />
-                      Stop
+                      停止
                     </>
                   ) : (
                     <>
                       <Play className="mr-2 h-4 w-4" />
-                      Execute
+                      执行
                     </>
                   )}
                 </Button>
@@ -699,9 +699,9 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
               {messages.length === 0 && !isRunning && (
                 <div className="flex flex-col items-center justify-center h-full text-center">
                   <Terminal className="h-16 w-16 text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Ready to Execute</h3>
+                  <h3 className="text-lg font-medium mb-2">准备执行</h3>
                   <p className="text-sm text-muted-foreground">
-                    Select a project path and enter a task to run the agent
+                    选择项目路径并输入任务以运行代理
                   </p>
                 </div>
               )}
@@ -710,7 +710,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                 <div className="flex items-center justify-center h-full">
                   <div className="flex items-center gap-3">
                     <Loader2 className="h-6 w-6 animate-spin" />
-                    <span className="text-sm text-muted-foreground">Initializing agent...</span>
+                    <span className="text-sm text-muted-foreground">正在初始化代理...</span>
                   </div>
                 </div>
               )}
@@ -764,7 +764,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
           <div className="flex items-center justify-between p-4 border-b border-border">
             <div className="flex items-center gap-2">
               {renderIcon()}
-              <h2 className="text-lg font-semibold">{agent.name} - Output</h2>
+              <h2 className="text-lg font-semibold">{agent.name} - 输出</h2>
               {isRunning && (
                 <div className="flex items-center gap-1">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -781,7 +781,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                     className="flex items-center gap-2"
                   >
                     <Copy className="h-4 w-4" />
-                    Copy Output
+                    复制输出
                     <ChevronDown className="h-3 w-3" />
                   </Button>
                 }
@@ -793,7 +793,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                       className="w-full justify-start"
                       onClick={handleCopyAsJsonl}
                     >
-                      Copy as JSONL
+                      复制为 JSONL
                     </Button>
                     <Button
                       variant="ghost"
@@ -801,7 +801,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                       className="w-full justify-start"
                       onClick={handleCopyAsMarkdown}
                     >
-                      Copy as Markdown
+                      复制为 Markdown
                     </Button>
                   </div>
                 }
@@ -816,7 +816,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                 className="flex items-center gap-2"
               >
                 <X className="h-4 w-4" />
-                Close
+                关闭
               </Button>
             </div>
           </div>
@@ -841,9 +841,9 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
               {messages.length === 0 && !isRunning && (
                 <div className="flex flex-col items-center justify-center h-full text-center">
                   <Terminal className="h-16 w-16 text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Ready to Execute</h3>
+                  <h3 className="text-lg font-medium mb-2">准备执行</h3>
                   <p className="text-sm text-muted-foreground">
-                    Select a project path and enter a task to run the agent
+                    选择项目路径并输入任务以运行代理
                   </p>
                 </div>
               )}
@@ -852,7 +852,7 @@ export const AgentExecution: React.FC<AgentExecutionProps> = ({
                 <div className="flex items-center justify-center h-full">
                   <div className="flex items-center gap-3">
                     <Loader2 className="h-6 w-6 animate-spin" />
-                    <span className="text-sm text-muted-foreground">Initializing agent...</span>
+                    <span className="text-sm text-muted-foreground">正在初始化代理...</span>
                   </div>
                 </div>
               )}
