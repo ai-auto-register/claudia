@@ -177,11 +177,58 @@ export const ClaudeVersionSelector: React.FC<ClaudeVersionSelectorProps> = ({
 
   if (installations.length === 0) {
     return (
-      <Card className={cn("p-4", className)}>
-        <div className="text-sm text-muted-foreground">
-          在您的系统上未找到 Claude Code 安装。
-        </div>
-      </Card>
+      <div className={cn("space-y-4", className)}>
+        <Card className="p-4">
+          <div className="text-sm text-muted-foreground mb-3">
+            在您的系统上未找到 Claude Code 安装。
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowManualPathDialog(true)}
+            className="gap-1"
+          >
+            <FolderInput className="h-4 w-4" />
+            手动输入路径
+          </Button>
+        </Card>
+        
+        {/* 手动输入路径对话框 */}
+        <Dialog open={showManualPathDialog} onOpenChange={setShowManualPathDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>手动输入 Claude Code 路径</DialogTitle>
+              <DialogDescription>
+                请输入 Claude Code 二进制文件的完整路径
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="py-4">
+              <Input
+                value={manualPath}
+                onChange={(e) => {
+                  setManualPath(e.target.value);
+                  setManualPathError(null);
+                }}
+                placeholder="/usr/local/bin/claude 或 C:\Program Files\Claude\claude.exe"
+                className="font-mono text-sm"
+              />
+              {manualPathError && (
+                <p className="text-xs text-destructive mt-1">{manualPathError}</p>
+              )}
+            </div>
+            
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowManualPathDialog(false)}>
+                取消
+              </Button>
+              <Button onClick={handleManualPathSubmit}>
+                确认
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
     );
   }
 
