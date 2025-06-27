@@ -5,8 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Loader2, Terminal, Package, Check } from "lucide-react";
+import { Loader2, Terminal, Package, Check, FolderInput } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 interface ClaudeVersionSelectorProps {
   /**
@@ -56,6 +65,9 @@ export const ClaudeVersionSelector: React.FC<ClaudeVersionSelectorProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedInstallation, setSelectedInstallation] = useState<ClaudeInstallation | null>(null);
+  const [showManualPathDialog, setShowManualPathDialog] = useState(false);
+  const [manualPath, setManualPath] = useState("");
+  const [manualPathError, setManualPathError] = useState<string | null>(null);
 
   useEffect(() => {
     loadInstallations();
@@ -102,8 +114,34 @@ export const ClaudeVersionSelector: React.FC<ClaudeVersionSelectorProps> = ({
     onSelect(installation);
   };
 
+  const handleManualPathSubmit = () => {
+    if (!manualPath.trim()) {
+      setManualPathError("请输入有效的路径");
+      return;
+    }
+
+    // 创建一个手动安装项
+    const manualInstallation: ClaudeInstallation = {
+      path: manualPath.trim(),
+      source: "manual",
+    };
+
+    // 添加到安装列表
+    const updatedInstallations = [manualInstallation, ...installations];
+    setInstallations(updatedInstallations);
+    
+    // 选择这个手动安装项
+    handleSelect(manualInstallation);
+    
+    // 关闭对话框并重置状态
+    setShowManualPathDialog(false);
+    setManualPath("");
+    setManualPathError(null);
+  };
+
   const getSourceIcon = (source: string) => {
     if (source.includes("nvm")) return <Package className="w-4 h-4" />;
+    if (source === "manual") return <FolderInput className="w-4 h-4" />;
     return <Terminal className="w-4 h-4" />;
   };
 
@@ -117,6 +155,7 @@ export const ClaudeVersionSelector: React.FC<ClaudeVersionSelectorProps> = ({
     if (source === "npm-global") return "NPM 全局";
     if (source === "yarn" || source === "yarn-global") return "Yarn";
     if (source === "bun") return "Bun";
+    if (source === "manual") return "手动输入";
     return source;
   };
 
@@ -149,9 +188,20 @@ export const ClaudeVersionSelector: React.FC<ClaudeVersionSelectorProps> = ({
   return (
     <div className={cn("space-y-4", className)}>
       <div>
-        <Label className="text-sm font-medium mb-3 block">
-          选择 Claude Code 安装
-        </Label>
+        <div className="flex justify-between items-center mb-3">
+          <Label className="text-sm font-medium">
+            选择 Claude Code 安装
+          </Label>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowManualPathDialog(true)}
+            className="gap-1"
+          >
+            <FolderInput className="h-4 w-4" />
+            手动输入路径
+          </Button>
+        </div>
         <RadioGroup
           value={selectedInstallation?.path}
           onValueChange={(value: string) => {
@@ -226,6 +276,42 @@ export const ClaudeVersionSelector: React.FC<ClaudeVersionSelectorProps> = ({
           </Button>
         </div>
       )}
+
+      {/* 手动输入路径对话框 */}
+      <Dialog open={showManualPathDialog} onOpenChange={setShowManualPathDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>手动输入 Claude Code 路径</DialogTitle>
+            <DialogDescription>
+              请输入 Claude Code 二进制文件的完整路径
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="py-4">
+            <Input
+              value={manualPath}
+              onChange={(e) => {
+                setManualPath(e.target.value);
+                setManualPathError(null);
+              }}
+              placeholder="/usr/local/bin/claude 或 C:\Program Files\Claude\claude.exe"
+              className="font-mono text-sm"
+            />
+            {manualPathError && (
+              <p className="text-xs text-destructive mt-1">{manualPathError}</p>
+            )}
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowManualPathDialog(false)}>
+              取消
+            </Button>
+            <Button onClick={handleManualPathSubmit}>
+              确认
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
-}; 
+};

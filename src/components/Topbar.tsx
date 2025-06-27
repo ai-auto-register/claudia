@@ -137,7 +137,7 @@ export const Topbar: React.FC<TopbarProps> = ({
                 className="w-full"
                 onClick={onSettingsClick}
               >
-                选择 Claude 安装路径
+                选择 Claude Code 安装路径
               </Button>
               <a
                 href="https://www.anthropic.com/claude-code"
